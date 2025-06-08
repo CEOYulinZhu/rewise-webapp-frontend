@@ -27,7 +27,7 @@ const Overview: React.FC = () => {
         },
         {
             id: 'recycle',
-            title: '回收/捐赠',
+            title: '回收捐赠',
             subtitle: '传递爱心，环保先行',
             percentage: 70,
             description: '该物品适合进行环保回收或爱心捐赠，我们为您找到了多个便民回收点和公益组织。',
@@ -105,19 +105,27 @@ const Overview: React.FC = () => {
             </div>
 
             {/* 物品信息预览 */}
-            {image && (
+            {(image || description) && (
                 <div className="mx-4 mb-6">
                     <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-green-100">
                         <div className="flex items-center space-x-4">
-                            <img
-                                src={image}
-                                alt="上传的物品"
-                                className="w-16 h-16 object-cover rounded-xl shadow-md"
-                            />
+                            {image ? (
+                                <img
+                                    src={image}
+                                    alt="上传的物品"
+                                    className="w-16 h-16 object-cover rounded-xl shadow-md"
+                                />
+                            ) : (
+                                <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-xl shadow-md flex items-center justify-center">
+                                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
+                            )}
                             <div className="flex-1">
                                 <h3 className="font-semibold text-gray-800 mb-1">您的物品</h3>
                                 <p className="text-sm text-gray-600 line-clamp-2">
-                                    {description || '暂无描述'}
+                                    {description || '基于文字描述的物品'}
                                 </p>
                             </div>
                         </div>
@@ -203,15 +211,6 @@ const Overview: React.FC = () => {
                         </div>
                     );
                 })}
-            </div>
-
-            {/* 底部提示 */}
-            <div className="px-4 pb-8">
-                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-green-100">
-                    <p className="text-sm text-gray-600">
-                        💡 建议结合多种方式处置，让闲置物品发挥最大价值
-                    </p>
-                </div>
             </div>
         </div>
     );
