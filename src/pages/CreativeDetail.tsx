@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, Share2, ExternalLink, Star, Clock, Wrench, CheckCircle, BarChart3, Settings, BookOpen, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Heart, Share2, ExternalLink, Star, Clock, Wrench, CheckCircle, BarChart3, Settings, BookOpen, Lightbulb, DollarSign, Palette, Sparkles, Zap, Leaf, Shield, AlertTriangle, Target, Users, Music, Camera, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface LocationState {
     image: string;
@@ -14,6 +14,9 @@ const CreativeDetail: React.FC = () => {
     const { image, description } = (location.state as LocationState) || {};
     const [isFavorited, setIsFavorited] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
+    const [showDetailedTips, setShowDetailedTips] = useState(false);
+    const [showExperience, setShowExperience] = useState(false);
+    const [showSafety, setShowSafety] = useState(false);
 
     // 模拟改造步骤数据
     const creativeSteps = [
@@ -220,54 +223,62 @@ const CreativeDetail: React.FC = () => {
                     {/* 概览标签页 */}
                     {activeTab === 'overview' && (
                         <div className="space-y-6">
-                            {/* 改造优势 */}
+                            {/* 项目概要 */}
                             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-purple-100">
-                                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                                    <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
-                                    为什么推荐创意改造？
-                                </h3>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
-                                        <div className="text-2xl mb-2">🌱</div>
-                                        <div className="font-semibold text-green-700">环保价值</div>
-                                        <div className="text-xs text-green-600">减少废物产生</div>
+                                <div className="text-center mb-6">
+                                    <h3 className="text-xl font-bold text-gray-800 mb-2">项目概要</h3>
+                                    <p className="text-sm text-gray-500">全面了解这个改造项目</p>
+                                </div>
+
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                    <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl">
+                                        <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <Settings className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div className="text-2xl font-bold text-purple-700">4</div>
+                                        <div className="text-xs text-purple-600">改造步骤</div>
                                     </div>
-                                    <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl">
-                                        <div className="text-2xl mb-2">🎨</div>
-                                        <div className="font-semibold text-blue-700">创意表达</div>
-                                        <div className="text-xs text-blue-600">发挥想象力</div>
+                                    <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl">
+                                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <Clock className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div className="text-2xl font-bold text-blue-700">3-4小时</div>
+                                        <div className="text-xs text-blue-600">预计耗时</div>
                                     </div>
-                                    <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
-                                        <div className="text-2xl mb-2">💰</div>
-                                        <div className="font-semibold text-purple-700">经济实惠</div>
-                                        <div className="text-xs text-purple-600">节省购买成本</div>
+                                    <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl">
+                                        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <Target className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div className="text-2xl font-bold text-green-700">中等</div>
+                                        <div className="text-xs text-green-600">难度等级</div>
                                     </div>
-                                    <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl">
-                                        <div className="text-2xl mb-2">✨</div>
-                                        <div className="font-semibold text-orange-700">独特性</div>
-                                        <div className="text-xs text-orange-600">制作专属物品</div>
+                                    <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl">
+                                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <DollarSign className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div className="text-2xl font-bold text-orange-700">60-110元</div>
+                                        <div className="text-xs text-orange-600">预算范围</div>
+                                    </div>
+                                </div>
+
+                                {/* 推荐度指示器 */}
+                                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4 border border-purple-200">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center space-x-2">
+                                            <Star className="w-5 h-5 text-yellow-500 fill-current" />
+                                            <span className="font-bold text-gray-800">推荐度评分</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">85%</div>
+                                            <div className="text-xs text-gray-600">综合评估</div>
+                                        </div>
+                                    </div>
+                                    <div className="h-2 bg-purple-100 rounded-full overflow-hidden">
+                                        <div className="h-full bg-gradient-to-r from-purple-400 to-pink-500 transition-all duration-1000 ease-out" style={{ width: '85%' }}></div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* 快速预览 */}
-                            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-purple-100">
-                                <h3 className="text-lg font-bold text-gray-800 mb-4">改造预览</h3>
-                                <div className="grid grid-cols-3 gap-4 text-center">
-                                    <div className="p-4 bg-purple-50 rounded-2xl">
-                                        <div className="text-2xl font-bold text-purple-700">4</div>
-                                        <div className="text-sm text-purple-600">改造步骤</div>
-                                    </div>
-                                    <div className="p-4 bg-blue-50 rounded-2xl">
-                                        <div className="text-2xl font-bold text-blue-700">3-4小时</div>
-                                        <div className="text-sm text-blue-600">预计耗时</div>
-                                    </div>
-                                    <div className="p-4 bg-green-50 rounded-2xl">
-                                        <div className="text-2xl font-bold text-green-700">中等</div>
-                                        <div className="text-sm text-green-600">难度等级</div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     )}
 
@@ -373,50 +384,199 @@ const CreativeDetail: React.FC = () => {
                     {/* 提示标签页 */}
                     {activeTab === 'tips' && (
                         <div className="space-y-6">
-                            {/* 温馨提示 */}
-                            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-4 border border-yellow-200">
-                                <h4 className="font-semibold text-yellow-800 mb-2">💡 温馨提示</h4>
-                                <ul className="text-sm text-yellow-700 space-y-1">
-                                    <li>• 改造前请确保有足够的时间和空间</li>
-                                    <li>• 使用工具时注意安全，佩戴防护用品</li>
-                                    <li>• 建议先在小范围测试，再进行整体改造</li>
-                                    <li>• 可以邀请朋友一起，增加改造的乐趣</li>
-                                </ul>
-                            </div>
-
-                            {/* 安全注意事项 */}
-                            <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-2xl p-4 border border-red-200">
-                                <h4 className="font-semibold text-red-800 mb-2">⚠️ 安全注意事项</h4>
-                                <ul className="text-sm text-red-700 space-y-1">
-                                    <li>• 使用尖锐工具时务必小心，避免割伤</li>
-                                    <li>• 使用化学材料时保持通风良好</li>
-                                    <li>• 儿童操作时需成人陪同指导</li>
-                                    <li>• 如有过敏史，请提前做皮肤测试</li>
-                                </ul>
-                            </div>
-
-                            {/* 成本预估 */}
+                            {/* 核心价值 - 始终显示 */}
                             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-purple-100">
-                                <h4 className="font-semibold text-gray-800 mb-4">💰 成本预估</h4>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center p-3 bg-purple-50 rounded-xl">
-                                        <span className="text-gray-700">基础材料</span>
-                                        <span className="font-semibold text-purple-700">30-50元</span>
-                                    </div>
-                                    <div className="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
-                                        <span className="text-gray-700">装饰用品</span>
-                                        <span className="font-semibold text-blue-700">20-40元</span>
-                                    </div>
-                                    <div className="flex justify-between items-center p-3 bg-green-50 rounded-xl">
-                                        <span className="text-gray-700">工具租借</span>
-                                        <span className="font-semibold text-green-700">10-20元</span>
-                                    </div>
-                                    <div className="border-t pt-3">
-                                        <div className="flex justify-between items-center font-bold">
-                                            <span className="text-gray-800">预计总成本</span>
-                                            <span className="text-purple-700 text-lg">60-110元</span>
+                                <div className="text-center mb-6">
+                                    <h3 className="text-xl font-bold text-gray-800 mb-2">为什么选择创意改造？</h3>
+                                    <p className="text-sm text-gray-500">发现旧物新价值</p>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl hover:shadow-md transition-all duration-300">
+                                        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <Leaf className="w-6 h-6 text-white" />
                                         </div>
+                                        <div className="font-semibold text-green-700 mb-1">环保减废</div>
+                                        <div className="text-xs text-green-600">为地球贡献力量</div>
                                     </div>
+                                    <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl hover:shadow-md transition-all duration-300">
+                                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <Palette className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div className="font-semibold text-blue-700 mb-1">创意表达</div>
+                                        <div className="text-xs text-blue-600">展现个人风格</div>
+                                    </div>
+                                    <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl hover:shadow-md transition-all duration-300">
+                                        <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <DollarSign className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div className="font-semibold text-purple-700 mb-1">节省开支</div>
+                                        <div className="text-xs text-purple-600">性价比超高</div>
+                                    </div>
+                                    <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl hover:shadow-md transition-all duration-300">
+                                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <Sparkles className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div className="font-semibold text-orange-700 mb-1">独一无二</div>
+                                        <div className="text-xs text-orange-600">专属定制感</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 折叠模块区域 - 紧凑间距 */}
+                            <div className="space-y-3">
+                                {/* 安全提醒 - 可折叠展开 */}
+                                <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl border border-red-100 shadow-lg">
+                                    <button
+                                        onClick={() => setShowSafety(!showSafety)}
+                                        className="w-full p-4 flex items-center justify-between hover:bg-red-100/30 transition-colors rounded-t-2xl"
+                                    >
+                                        <div className="flex items-center">
+                                            <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center mr-3">
+                                                <Shield className="w-4 h-4 text-white" />
+                                            </div>
+                                            <div className="text-left">
+                                                <h4 className="font-bold text-red-800">安全第一</h4>
+                                                <p className="text-xs text-red-600">改造前必读</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium">必读</span>
+                                            {showSafety ? (
+                                                <ChevronUp className="w-5 h-5 text-red-600" />
+                                            ) : (
+                                                <ChevronDown className="w-5 h-5 text-red-600" />
+                                            )}
+                                        </div>
+                                    </button>
+
+                                    {showSafety && (
+                                        <div className="px-4 pb-4 animate-in slide-in-from-top-2 duration-300">
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
+                                                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                                    <span className="text-sm text-red-700">佩戴防护用品</span>
+                                                </div>
+                                                <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
+                                                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                                    <span className="text-sm text-red-700">保持环境通风</span>
+                                                </div>
+                                                <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
+                                                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                                    <span className="text-sm text-red-700">儿童需大人陪同</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* 更多提示 - 可折叠展开 */}
+                                <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-purple-100 shadow-lg">
+                                    <button
+                                        onClick={() => setShowDetailedTips(!showDetailedTips)}
+                                        className="w-full p-4 flex items-center justify-between hover:bg-purple-50/50 transition-colors rounded-t-2xl"
+                                    >
+                                        <div className="flex items-center">
+                                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-3">
+                                                <Target className="w-4 h-4 text-white" />
+                                            </div>
+                                            <div className="text-left">
+                                                <h4 className="font-bold text-gray-800">成功技巧指南</h4>
+                                                <p className="text-xs text-gray-500">让改造更加专业高效</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">推荐</span>
+                                            {showDetailedTips ? (
+                                                <ChevronUp className="w-5 h-5 text-gray-500" />
+                                            ) : (
+                                                <ChevronDown className="w-5 h-5 text-gray-500" />
+                                            )}
+                                        </div>
+                                    </button>
+
+                                    {showDetailedTips && (
+                                        <div className="px-4 pb-4 space-y-4 animate-in slide-in-from-top-2 duration-300">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+                                                    <h5 className="font-semibold text-green-800 mb-3 flex items-center">
+                                                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs mr-2">1</div>
+                                                        前期准备
+                                                    </h5>
+                                                    <div className="space-y-2 text-sm text-green-700">
+                                                        <div className="flex items-center space-x-2">
+                                                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                                            <span>先测试再全面改造</span>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                                            <span>预留充足时间</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border border-blue-100">
+                                                    <h5 className="font-semibold text-blue-800 mb-3 flex items-center">
+                                                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs mr-2">2</div>
+                                                        执行要点
+                                                    </h5>
+                                                    <div className="space-y-2 text-sm text-blue-700">
+                                                        <div className="flex items-center space-x-2">
+                                                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                                                            <span>记录改造过程</span>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                                                            <span>分步骤完成</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* 体验提升 - 可折叠展开 */}
+                                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl border border-yellow-200">
+                                    <button
+                                        onClick={() => setShowExperience(!showExperience)}
+                                        className="w-full p-4 flex items-center justify-between hover:bg-yellow-100/30 transition-colors rounded-t-2xl"
+                                    >
+                                        <div className="flex items-center">
+                                            <div className="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center mr-3">
+                                                <Heart className="w-4 h-4 text-white" />
+                                            </div>
+                                            <div className="text-left">
+                                                <h4 className="font-bold text-yellow-800">体验加分</h4>
+                                                <p className="text-xs text-yellow-600">让改造过程更愉快</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full">选做</span>
+                                            {showExperience ? (
+                                                <ChevronUp className="w-5 h-5 text-yellow-600" />
+                                            ) : (
+                                                <ChevronDown className="w-5 h-5 text-yellow-600" />
+                                            )}
+                                        </div>
+                                    </button>
+
+                                    {showExperience && (
+                                        <div className="px-4 pb-4 animate-in slide-in-from-top-2 duration-300">
+                                            <div className="flex flex-wrap gap-3">
+                                                <div className="flex items-center space-x-2 bg-white/50 rounded-lg px-3 py-2 text-sm text-yellow-700">
+                                                    <Users className="w-4 h-4 text-yellow-600" />
+                                                    <span>邀请朋友</span>
+                                                </div>
+                                                <div className="flex items-center space-x-2 bg-white/50 rounded-lg px-3 py-2 text-sm text-yellow-700">
+                                                    <Music className="w-4 h-4 text-yellow-600" />
+                                                    <span>播放音乐</span>
+                                                </div>
+                                                <div className="flex items-center space-x-2 bg-white/50 rounded-lg px-3 py-2 text-sm text-yellow-700">
+                                                    <Camera className="w-4 h-4 text-yellow-600" />
+                                                    <span>记录时光</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
