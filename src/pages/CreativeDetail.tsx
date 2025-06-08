@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, Share2, ExternalLink, Star, Clock, Wrench, CheckCircle, BarChart3, Settings, BookOpen, Lightbulb, DollarSign, Palette, Sparkles, Zap, Leaf, Shield, AlertTriangle, Target, Users, Music, Camera, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, Heart, Share2, ExternalLink, Star, Clock, Wrench, BarChart3, Settings, BookOpen, Lightbulb, DollarSign, Palette, Sparkles, Leaf, Shield, Target, Users, Music, Camera, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface LocationState {
     image: string;
