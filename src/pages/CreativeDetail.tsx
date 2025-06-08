@@ -155,14 +155,22 @@ const CreativeDetail: React.FC = () => {
 
             <div className="px-4 pb-8">
                 {/* 物品信息和推荐度 - 始终显示 */}
-                {image && (
+                {(image || description) && (
                     <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-purple-100 mb-6">
                         <div className="flex items-center space-x-4 mb-4">
-                            <img
-                                src={image}
-                                alt="物品图片"
-                                className="w-20 h-20 object-cover rounded-2xl shadow-lg"
-                            />
+                            {image ? (
+                                <img
+                                    src={image}
+                                    alt="物品图片"
+                                    className="w-20 h-20 object-cover rounded-2xl shadow-lg"
+                                />
+                            ) : (
+                                <div className="w-20 h-20 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl shadow-lg flex items-center justify-center">
+                                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
+                            )}
                             <div className="flex-1">
                                 <h3 className="font-bold text-gray-800 mb-1">您的物品</h3>
                                 <p className="text-sm text-gray-600 mb-2">
