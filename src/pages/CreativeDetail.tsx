@@ -330,7 +330,8 @@ const CreativeDetail: React.FC = () => {
                     {/* 教程标签页 */}
                     {activeTab === 'tutorials' && (
                         <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-purple-100">
-                            <h3 className="text-lg font-bold text-gray-800 mb-4">
+                            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <BookOpen className="w-5 h-5 text-purple-500 mr-2" />
                                 相关教程推荐
                             </h3>
                             <div className="space-y-4">
