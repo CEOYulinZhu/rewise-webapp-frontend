@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, Share2, MapPin, Phone, Globe, Clock, Navigation, Info, BarChart3, Map, Smartphone, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Heart, Share2, MapPin, Phone, Globe, Clock, Navigation, Info, BarChart3, Map, Smartphone, Lightbulb, Star, Users, Leaf, Shield, DollarSign, Zap, Target, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface LocationState {
     image: string;
@@ -13,7 +13,7 @@ const tabs = [
     { id: 'overview', name: '概览', icon: BarChart3 },
     { id: 'locations', name: '回收', icon: Map },
     { id: 'platforms', name: '平台', icon: Smartphone },
-    { id: 'tips', name: '提示', icon: AlertTriangle },
+    { id: 'tips', name: '提示', icon: Lightbulb },
 ];
 
 const RecycleDetail: React.FC = () => {
@@ -22,6 +22,8 @@ const RecycleDetail: React.FC = () => {
     const { image, description } = (location.state as LocationState) || {};
     const [isFavorited, setIsFavorited] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
+    const [showDetailedTips, setShowDetailedTips] = useState(false);
+    const [showSafety, setShowSafety] = useState(false);
 
     // 模拟回收点数据
     const recyclePoints = [
@@ -67,30 +69,42 @@ const RecycleDetail: React.FC = () => {
     const onlinePlatforms = [
         {
             id: 1,
-            name: '闲鱼回收',
-            description: '阿里巴巴旗下二手交易平台，支持多种物品回收',
+            name: '闲鱼',
+            description: '阿里巴巴旗下闲置交易社区',
             website: 'https://2.taobao.com',
-            features: ['免费上门', '在线估价', '快速到账'],
-            logo: '🐟',
-            color: 'from-orange-500 to-red-500'
+            features: ['免费发布', '在线估价', '同城交易'],
+            rating: 4.6,
+            users: '6亿+',
+            category: '综合平台',
+            logo: 'https://gw.alicdn.com/imgextra/i1/O1CN01Z5paLz1O0zuCC7osS_!!6000000001644-55-tps-83-83.svg',
+            color: 'from-orange-400 to-red-500',
+            bgColor: 'from-orange-50 to-red-50'
         },
         {
             id: 2,
             name: '爱回收',
-            description: '专业的数码产品回收平台，价格透明',
+            description: '专业数码回收平台',
             website: 'https://www.aihuishou.com',
-            features: ['专业估价', '顺丰包邮', '当天到账'],
-            logo: '♻️',
-            color: 'from-green-500 to-emerald-500'
+            features: ['专业估价', '上门回收', '当天到账'],
+            rating: 4.7,
+            users: '5000万+',
+            category: '数码回收',
+            logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzI2Q0Y0RSIvPgo8cGF0aCBkPSJNMjAgMzJMMTIgMjRIMTZWMTZIMjRWMjRIMjhMMjAgMzJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K',
+            color: 'from-green-400 to-emerald-500',
+            bgColor: 'from-green-50 to-emerald-50'
         },
         {
             id: 3,
-            name: '京东回收',
-            description: '京东商城官方回收服务，品质保障',
-            website: 'https://huishou.jd.com',
-            features: ['官方保障', '以旧换新', '环保认证'],
-            logo: '🛒',
-            color: 'from-red-500 to-pink-500'
+            name: '转转',
+            description: '58同城旗下二手交易平台',
+            website: 'https://www.zhuanzhuan.com',
+            features: ['质量检测', '安全保障', '无忧售后'],
+            rating: 4.5,
+            users: '4亿+',
+            category: '二手交易',
+            logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iI0ZGNkEwMCIvPgo8Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSI4IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiLz4KPHA6IG0xNiAyMGE0IDQgMCAwIDEgOCAwIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=',
+            color: 'from-yellow-400 to-orange-500',
+            bgColor: 'from-yellow-50 to-orange-50'
         }
     ];
 
@@ -116,7 +130,7 @@ const RecycleDetail: React.FC = () => {
     const handleShare = () => {
         if (navigator.share) {
             navigator.share({
-                title: '回收/捐赠方案',
+                title: '回收捐赠方案',
                 text: '发现一个很棒的回收捐赠方案！',
                 url: window.location.href,
             });
@@ -129,51 +143,58 @@ const RecycleDetail: React.FC = () => {
     // 概览内容
     const renderOverview = () => (
         <div className="space-y-6">
-            {/* 回收优势 */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-green-100">
-                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                    <Info className="w-5 h-5 text-green-500 mr-2" />
-                    为什么选择回收/捐赠？
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
-                        <div className="text-2xl mb-2">🌍</div>
-                        <div className="font-semibold text-green-700">保护环境</div>
-                        <div className="text-xs text-green-600">减少环境污染</div>
+            {/* 项目概要 */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-5 shadow-xl border border-green-100">
+                <div className="text-center mb-5">
+                    <h3 className="text-lg font-bold text-gray-800 mb-1">项目概要</h3>
+                    <p className="text-xs text-gray-500">全面了解这个回收项目</p>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+                    <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
+                        <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            <MapPin className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="text-xl font-bold text-green-700">3</div>
+                        <div className="text-xs text-green-600">回收点</div>
                     </div>
-                    <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl">
-                        <div className="text-2xl mb-2">💝</div>
-                        <div className="font-semibold text-blue-700">传递爱心</div>
-                        <div className="text-xs text-blue-600">帮助有需要的人</div>
+                    <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            <Smartphone className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="text-xl font-bold text-blue-700">3</div>
+                        <div className="text-xs text-blue-600">在线平台</div>
                     </div>
-                    <div className="text-center p-4 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl">
-                        <div className="text-2xl mb-2">🎯</div>
-                        <div className="font-semibold text-yellow-700">便民服务</div>
-                        <div className="text-xs text-yellow-600">就近处理方便</div>
+                    <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
+                        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            <Target className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="text-xl font-bold text-purple-700">简单</div>
+                        <div className="text-xs text-purple-600">操作难度</div>
                     </div>
-                    <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
-                        <div className="text-2xl mb-2">⚡</div>
-                        <div className="font-semibold text-purple-700">快速处理</div>
-                        <div className="text-xs text-purple-600">高效解决方案</div>
+                    <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl">
+                        <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            <Zap className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="text-xl font-bold text-orange-700">立即</div>
+                        <div className="text-xs text-orange-600">可执行</div>
                     </div>
                 </div>
-            </div>
 
-            {/* 环保统计 */}
-            <div className="bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl p-4 border border-green-200">
-                <h4 className="font-semibold text-green-800 mb-3 text-center">🌱 您的环保贡献</h4>
-                <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                        <div className="text-lg font-bold text-green-700">-2.3kg</div>
-                        <div className="text-xs text-green-600">减少碳排放</div>
+                {/* 推荐度指示器 */}
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-3 border border-green-200">
+                    <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-2">
+                            <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                            <span className="font-semibold text-gray-800 text-sm">推荐度评分</span>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">70%</div>
+                            <div className="text-xs text-gray-600">综合评估</div>
+                        </div>
                     </div>
-                    <div>
-                        <div className="text-lg font-bold text-green-700">+1</div>
-                        <div className="text-xs text-green-600">帮助他人</div>
-                    </div>
-                    <div>
-                        <div className="text-lg font-bold text-green-700">100%</div>
-                        <div className="text-xs text-green-600">资源再利用</div>
+                    <div className="h-2 bg-green-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-1000 ease-out" style={{ width: '70%' }}></div>
                     </div>
                 </div>
             </div>
@@ -263,37 +284,73 @@ const RecycleDetail: React.FC = () => {
     const renderPlatforms = () => (
         <div className="space-y-4">
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-green-100">
-                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center">
                     <Globe className="w-5 h-5 text-green-500 mr-2" />
-                    在线回收平台
+                    推荐回收平台
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3">
                     {onlinePlatforms.map((platform) => (
                         <div
                             key={platform.id}
-                            className={`bg-gradient-to-r ${platform.color.replace('from-', 'from-').replace('to-', 'to-').replace('-500', '-50').replace('-500', '-100')} rounded-2xl p-4 border border-white/50`}
+                            className={`bg-gradient-to-r ${platform.bgColor} rounded-2xl p-4 border border-white/30 hover:shadow-md hover:scale-[1.02] transition-all duration-300 cursor-pointer`}
+                            onClick={() => window.open(platform.website, '_blank')}
                         >
-                            <div className="flex items-start space-x-4">
-                                <div className="text-3xl">{platform.logo}</div>
-                                <div className="flex-1">
-                                    <h4 className="font-semibold text-gray-800 mb-1">{platform.name}</h4>
-                                    <p className="text-sm text-gray-600 mb-3">{platform.description}</p>
+                            <div className="flex items-center space-x-4">
+                                {/* 平台图标 */}
+                                <div className="flex-shrink-0">
+                                    <div className={`w-14 h-14 bg-gradient-to-r ${platform.color} rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-shadow duration-300`}>
+                                        <img
+                                            src={platform.logo}
+                                            alt={platform.name}
+                                            className="w-7 h-7"
+                                            onError={(e) => {
+                                                const target = e.currentTarget as HTMLImageElement;
+                                                target.style.display = 'none';
+                                                const nextSibling = target.nextElementSibling as HTMLElement;
+                                                if (nextSibling) {
+                                                    nextSibling.style.display = 'block';
+                                                }
+                                            }}
+                                        />
+                                        <span className="text-white font-bold text-xl hidden">{platform.name[0]}</span>
+                                    </div>
+                                </div>
 
-                                    <div className="flex flex-wrap gap-2 mb-3">
+                                <div className="flex-1 min-w-0 overflow-hidden">
+                                    {/* 平台名称行 */}
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center space-x-2 min-w-0 flex-1">
+                                            <h4 className="font-bold text-gray-800 text-lg truncate flex-shrink-0">{platform.name}</h4>
+                                            <div className="flex items-center space-x-1 bg-white/80 px-2 py-1 rounded-lg flex-shrink-0">
+                                                <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                                                <span className="text-xs font-medium text-gray-700">{platform.rating}</span>
+                                            </div>
+                                        </div>
+                                        <div className="text-xs text-gray-500 bg-white/60 px-2 py-1 rounded-lg flex-shrink-0 ml-2">
+                                            {platform.users}
+                                        </div>
+                                    </div>
+
+                                    {/* 平台描述 */}
+                                    <p className="text-sm text-gray-600 mb-3 leading-relaxed line-clamp-2">{platform.description}</p>
+
+                                    {/* 特色功能标签 */}
+                                    <div className="flex flex-wrap gap-2">
                                         {platform.features.map((feature, idx) => (
-                                            <span key={idx} className="text-xs bg-white/70 px-2 py-1 rounded-lg text-gray-700">
-                                                ✓ {feature}
+                                            <span key={idx} className="text-xs bg-white/70 backdrop-blur-sm px-3 py-1 rounded-full text-gray-700 font-medium border border-white/50 flex-shrink-0">
+                                                {feature}
                                             </span>
                                         ))}
                                     </div>
+                                </div>
 
-                                    <button
-                                        onClick={() => window.open(platform.website, '_blank')}
-                                        className="w-full bg-white/80 hover:bg-white text-gray-800 font-medium py-2 px-4 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300"
-                                    >
-                                        <Globe className="w-4 h-4" />
-                                        <span>访问平台</span>
-                                    </button>
+                                {/* 右侧箭头指示器 */}
+                                <div className="flex-shrink-0">
+                                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -305,51 +362,159 @@ const RecycleDetail: React.FC = () => {
 
     // 提示内容
     const renderTips = () => (
-        <div className="space-y-4">
-            {/* 注意事项 */}
-            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-4 border border-yellow-200">
-                <h4 className="font-semibold text-yellow-800 mb-2">📋 回收注意事项</h4>
-                <ul className="text-sm text-yellow-700 space-y-1">
-                    <li>• 回收前请清洁物品，确保无污渍异味</li>
-                    <li>• 电子产品请提前备份并清除个人信息</li>
-                    <li>• 衣物建议清洗干净，分类整理</li>
-                    <li>• 提前电话确认回收点的营业时间</li>
-                    <li>• 携带身份证件，部分回收点需要登记</li>
-                </ul>
-            </div>
-
-            {/* 环保小贴士 */}
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 border border-green-200">
-                <h4 className="font-semibold text-green-800 mb-2">🌱 环保小贴士</h4>
-                <div className="text-sm text-green-700 space-y-2">
-                    <p>• 定期整理家中物品，及时处理不需要的物品</p>
-                    <p>• 购买前先考虑是否真正需要，减少过度消费</p>
-                    <p>• 选择质量好的产品，延长使用寿命</p>
-                    <p>• 关注环保认证标识，支持可持续发展</p>
+        <div className="space-y-6">
+            {/* 为什么选择回收捐赠 - 移至顶部 */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-5 shadow-xl border border-green-100">
+                <div className="text-center mb-5">
+                    <h3 className="text-lg font-bold text-gray-800 mb-1">为什么选择回收捐赠？</h3>
+                    <p className="text-xs text-gray-500">发现旧物新价值</p>
                 </div>
-            </div>
-
-            {/* 安全提醒 */}
-            <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-2xl p-4 border border-red-200">
-                <h4 className="font-semibold text-red-800 mb-2">⚠️ 安全提醒</h4>
-                <div className="text-sm text-red-700 space-y-1">
-                    <p>• 选择正规有资质的回收机构</p>
-                    <p>• 保护个人隐私信息安全</p>
-                    <p>• 不要随意透露家庭住址等敏感信息</p>
-                    <p>• 如有疑问及时咨询官方客服</p>
-                </div>
-            </div>
-
-            {/* 联系支持 */}
-            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-4 border border-blue-200">
-                <h4 className="font-semibold text-blue-800 mb-2">📞 需要帮助？</h4>
-                <div className="text-sm text-blue-700">
-                    <p>如果您在回收过程中遇到任何问题，请随时联系我们：</p>
-                    <div className="mt-2 space-y-1">
-                        <p>• 客服热线：400-888-0000</p>
-                        <p>• 在线客服：工作日 9:00-18:00</p>
-                        <p>• 邮箱：support@recycleapp.com</p>
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="text-center p-3 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl hover:shadow-md transition-all duration-300">
+                        <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            <Leaf className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="font-semibold text-green-700 text-sm mb-1">环保减废</div>
+                        <div className="text-xs text-green-600">为地球贡献力量</div>
                     </div>
+                    <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl hover:shadow-md transition-all duration-300">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            <Heart className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="font-semibold text-blue-700 text-sm mb-1">传递爱心</div>
+                        <div className="text-xs text-blue-600">帮助有需要的人</div>
+                    </div>
+                    <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl hover:shadow-md transition-all duration-300">
+                        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            <DollarSign className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="font-semibold text-purple-700 text-sm mb-1">节省开支</div>
+                        <div className="text-xs text-purple-600">变废为宝</div>
+                    </div>
+                    <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl hover:shadow-md transition-all duration-300">
+                        <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            <Zap className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="font-semibold text-orange-700 text-sm mb-1">便民高效</div>
+                        <div className="text-xs text-orange-600">轻松处理</div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 折叠模块区域 - 紧凑间距 */}
+            <div className="space-y-3">
+                {/* 安全提醒 - 可折叠展开 */}
+                <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl border border-red-100 shadow-lg">
+                    <button
+                        onClick={() => setShowSafety(!showSafety)}
+                        className="w-full p-4 flex items-center justify-between hover:bg-red-100/30 transition-colors rounded-t-2xl"
+                    >
+                        <div className="flex items-center">
+                            <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center mr-3">
+                                <Shield className="w-4 h-4 text-white" />
+                            </div>
+                            <div className="text-left">
+                                <h4 className="font-bold text-red-800">安全提醒</h4>
+                                <p className="text-xs text-red-600">回收前必读</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium">必读</span>
+                            {showSafety ? (
+                                <ChevronUp className="w-5 h-5 text-red-600" />
+                            ) : (
+                                <ChevronDown className="w-5 h-5 text-red-600" />
+                            )}
+                        </div>
+                    </button>
+
+                    {showSafety && (
+                        <div className="px-4 pb-4 animate-in slide-in-from-top-2 duration-300">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
+                                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                    <span className="text-sm text-red-700">选择正规平台</span>
+                                </div>
+                                <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
+                                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                    <span className="text-sm text-red-700">保护隐私信息</span>
+                                </div>
+                                <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
+                                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                    <span className="text-sm text-red-700">核实回收资质</span>
+                                </div>
+                                <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
+                                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                    <span className="text-sm text-red-700">保留交易凭证</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* 使用技巧 - 可折叠展开 */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-green-100 shadow-lg">
+                    <button
+                        onClick={() => setShowDetailedTips(!showDetailedTips)}
+                        className="w-full p-4 flex items-center justify-between hover:bg-green-50/50 transition-colors rounded-t-2xl"
+                    >
+                        <div className="flex items-center">
+                            <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mr-3">
+                                <Target className="w-4 h-4 text-white" />
+                            </div>
+                            <div className="text-left">
+                                <h4 className="font-bold text-gray-800">使用技巧指南</h4>
+                                <p className="text-xs text-gray-500">让回收更高效便捷</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">推荐</span>
+                            {showDetailedTips ? (
+                                <ChevronUp className="w-5 h-5 text-gray-500" />
+                            ) : (
+                                <ChevronDown className="w-5 h-5 text-gray-500" />
+                            )}
+                        </div>
+                    </button>
+
+                    {showDetailedTips && (
+                        <div className="px-4 pb-4 space-y-4 animate-in slide-in-from-top-2 duration-300">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+                                    <h5 className="font-semibold text-green-800 mb-3 flex items-center">
+                                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs mr-2">1</div>
+                                        准备阶段
+                                    </h5>
+                                    <div className="space-y-2 text-sm text-green-700">
+                                        <div className="flex items-center space-x-2">
+                                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                            <span>清洁整理物品</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                            <span>清除个人信息</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border border-blue-100">
+                                    <h5 className="font-semibold text-blue-800 mb-3 flex items-center">
+                                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs mr-2">2</div>
+                                        选择平台
+                                    </h5>
+                                    <div className="space-y-2 text-sm text-blue-700">
+                                        <div className="flex items-center space-x-2">
+                                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                                            <span>对比多个平台</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                                            <span>选择合适渠道</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -381,7 +546,7 @@ const RecycleDetail: React.FC = () => {
                 >
                     <ArrowLeft className="w-5 h-5 text-green-600" />
                 </button>
-                <h1 className="absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-gray-800">回收/捐赠方案</h1>
+                <h1 className="absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-gray-800">回收捐赠方案</h1>
                 <div className="flex space-x-2 ml-auto">
                     <button
                         onClick={() => setIsFavorited(!isFavorited)}
