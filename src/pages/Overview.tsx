@@ -135,14 +135,14 @@ const Overview: React.FC = () => {
 
             {/* 推荐卡片列表 */}
             <div className="px-4 space-y-4 pb-8">
-                <div className="text-center mb-6">
+                {/* <div className="text-center mb-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-2">
                         为您推荐以下处置方案
                     </h2>
                     <p className="text-gray-600 text-sm">
                         点击查看详细建议和具体操作指南
                     </p>
-                </div>
+                </div> */}
 
                 {recommendations.map((rec, index) => {
                     const Icon = rec.icon;
