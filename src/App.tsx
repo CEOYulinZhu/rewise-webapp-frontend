@@ -7,6 +7,8 @@ import TradingDetail from './pages/TradingDetail';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import EditProfile from './pages/EditProfile';
+import UserAgreement from './pages/UserAgreement';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import About from './pages/About';
 import Feedback from './pages/Feedback';
 import Settings from './pages/Settings';
@@ -29,6 +31,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/user-agreement" element={<UserAgreement />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/about" element={<About />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/settings" element={<Settings />} />
