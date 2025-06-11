@@ -192,11 +192,11 @@ const Login: React.FC = () => {
                     <ArrowLeft className="w-5 h-5 text-gray-600" />
                 </button>
 
-                <div className="flex items-center space-x-4">
-                    <div className="flex bg-gray-100 rounded-full p-1">
+                <div className="flex items-center justify-center flex-1">
+                    <div className="flex bg-gray-100 rounded-full p-1.5 w-64">
                         <button
                             onClick={() => setIsLogin(true)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isLogin
+                            className={`flex-1 py-2.5 px-6 rounded-full text-base font-medium transition-all duration-300 ${isLogin
                                 ? 'bg-white text-green-600 shadow-sm'
                                 : 'text-gray-600 hover:text-gray-800'
                                 }`}
@@ -205,7 +205,7 @@ const Login: React.FC = () => {
                         </button>
                         <button
                             onClick={() => setIsLogin(false)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${!isLogin
+                            className={`flex-1 py-2.5 px-6 rounded-full text-base font-medium transition-all duration-300 ${!isLogin
                                 ? 'bg-white text-green-600 shadow-sm'
                                 : 'text-gray-600 hover:text-gray-800'
                                 }`}
@@ -402,11 +402,19 @@ const Login: React.FC = () => {
                                     </div>
                                     <span className="text-sm text-gray-600 leading-relaxed">
                                         我已阅读并同意
-                                        <button type="button" className="text-green-600 hover:text-green-700 mx-1 underline font-medium">
+                                        <button
+                                            type="button"
+                                            onClick={() => navigate('/user-agreement')}
+                                            className="text-green-600 hover:text-green-700 mx-1 underline font-medium"
+                                        >
                                             用户协议
                                         </button>
                                         和
-                                        <button type="button" className="text-green-600 hover:text-green-700 mx-1 underline font-medium">
+                                        <button
+                                            type="button"
+                                            onClick={() => navigate('/privacy-policy')}
+                                            className="text-green-600 hover:text-green-700 mx-1 underline font-medium"
+                                        >
                                             隐私政策
                                         </button>
                                     </span>
@@ -464,7 +472,7 @@ const Login: React.FC = () => {
                 </div>
             </div>
 
-        
+
         </div>
     );
 };
