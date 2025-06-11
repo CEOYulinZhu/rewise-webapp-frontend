@@ -61,7 +61,7 @@ const Profile: React.FC = () => {
                 // 跳转到收藏页面
                 break;
             case 'settings':
-                // 跳转到设置页面
+                navigate('/settings');
                 break;
             case 'about':
                 // 跳转到关于我们页面
