@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Recycle, Heart, Users, Mail, Globe, Shield, Lightbulb, Award, Leaf, Palette, Code, Headphones } from 'lucide-react';
+import { ArrowLeft, Recycle, Heart, Mail, Globe, Shield, Palette, Code, Headphones } from 'lucide-react';
 
 const About: React.FC = () => {
     const navigate = useNavigate();
