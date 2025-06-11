@@ -19,7 +19,7 @@ const Overview: React.FC = () => {
             title: '创意改造',
             subtitle: '让旧物焕发新生命',
             percentage: 85,
-            description: '根据您的物品特征，我们推荐进行创意改造。这件物品具有很好的改造潜力，可以制作成实用的家居用品。',
+            reasons: ['改造潜力大', '实用性强', '成本较低', '创意空间足'],
             icon: Palette,
             gradient: 'from-purple-500 to-pink-500',
             bgGradient: 'from-purple-50 to-pink-50',
@@ -30,7 +30,7 @@ const Overview: React.FC = () => {
             title: '回收捐赠',
             subtitle: '传递爱心，环保先行',
             percentage: 70,
-            description: '该物品适合进行环保回收或爱心捐赠，我们为您找到了多个便民回收点和公益组织。',
+            reasons: ['环保价值高', '回收点便民', '公益意义大', '流程简单'],
             icon: Recycle,
             gradient: 'from-green-500 to-emerald-500',
             bgGradient: 'from-green-50 to-emerald-50',
@@ -41,7 +41,7 @@ const Overview: React.FC = () => {
             title: '二手平台交易',
             subtitle: '经济实惠，物尽其用',
             percentage: 60,
-            description: '通过二手平台出售能获得不错的经济回报，我们分析了市场行情为您提供最优策略。',
+            reasons: ['市场需求稳定', '价格合理', '交易便捷', '回报可观'],
             icon: ShoppingBag,
             gradient: 'from-blue-500 to-cyan-500',
             bgGradient: 'from-blue-50 to-cyan-50',
@@ -49,10 +49,18 @@ const Overview: React.FC = () => {
         }
     ];
 
-    const getProgressColor = (percentage: number) => {
-        if (percentage >= 80) return 'from-green-400 to-emerald-500';
-        if (percentage >= 60) return 'from-yellow-400 to-orange-500';
-        return 'from-red-400 to-pink-500';
+    // 统一的进度条颜色，与各方案的主题色保持一致
+    const getProgressColor = (id: string) => {
+        switch (id) {
+            case 'creative':
+                return 'from-purple-400 to-pink-400';
+            case 'recycle':
+                return 'from-green-400 to-emerald-400';
+            case 'trading':
+                return 'from-blue-400 to-cyan-400';
+            default:
+                return 'from-gray-400 to-gray-500';
+        }
     };
 
     const handleDetailClick = (route: string, recommendation: any) => {
@@ -62,7 +70,7 @@ const Overview: React.FC = () => {
             title: recommendation.title,
             subtitle: recommendation.subtitle,
             percentage: recommendation.percentage,
-            description: recommendation.description,
+            reasons: recommendation.reasons,
             gradient: recommendation.gradient,
             bgGradient: recommendation.bgGradient,
             route: recommendation.route
@@ -135,14 +143,7 @@ const Overview: React.FC = () => {
 
             {/* 推荐卡片列表 */}
             <div className="px-4 space-y-4 pb-8">
-                {/* <div className="text-center mb-6">
-                    <h2 className="text-xl font-bold text-gray-800 mb-2">
-                        为您推荐以下处置方案
-                    </h2>
-                    <p className="text-gray-600 text-sm">
-                        点击查看详细建议和具体操作指南
-                    </p>
-                </div> */}
+        
 
                 {recommendations.map((rec, index) => {
                     const Icon = rec.icon;
@@ -185,23 +186,32 @@ const Overview: React.FC = () => {
 
                                     {/* 进度条 */}
                                     <div className="mb-4">
-                                        <div className="h-2 bg-white/50 rounded-full overflow-hidden">
+                                        <div className="h-2 bg-white/40 rounded-full overflow-hidden">
                                             <div
-                                                className={`h-full bg-gradient-to-r ${getProgressColor(rec.percentage)} transition-all duration-1000 ease-out`}
+                                                className={`h-full bg-gradient-to-r ${getProgressColor(rec.id)} transition-all duration-1000 ease-out shadow-sm`}
                                                 style={{ width: `${rec.percentage}%` }}
                                             />
                                         </div>
                                     </div>
 
-                                    {/* 描述 */}
-                                    <p className="text-sm text-gray-700 mb-4 leading-relaxed">
-                                        {rec.description}
-                                    </p>
+                                    {/* 推荐理由标签 */}
+                                    <div className="mb-4">
+                                        <div className="flex flex-wrap gap-2">
+                                            {rec.reasons.map((reason, reasonIndex) => (
+                                                <span
+                                                    key={reasonIndex}
+                                                    className="inline-flex items-center px-3 py-1.5 text-xs font-medium bg-white/60 text-gray-700 rounded-full border border-white/40 backdrop-blur-sm"
+                                                >
+                                                    {reason}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
 
                                     {/* 查看详情按钮 */}
                                     <button
                                         onClick={() => handleDetailClick(rec.route, rec)}
-                                        className="w-full bg-white/80 hover:bg-white text-gray-800 font-medium py-3 px-4 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 hover:shadow-md"
+                                        className={`w-full bg-gradient-to-r ${rec.gradient} hover:shadow-lg text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 hover:scale-[1.02] shadow-md`}
                                     >
                                         <span>查看详细方案</span>
                                         <ChevronRight className="w-4 h-4" />
