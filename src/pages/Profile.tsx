@@ -55,7 +55,7 @@ const Profile: React.FC = () => {
     const handleMenuClick = (itemId: string) => {
         switch (itemId) {
             case 'history':
-                // 跳转到历史记录页面
+                navigate('/history');
                 break;
             case 'favorites':
                 navigate('/favorites');

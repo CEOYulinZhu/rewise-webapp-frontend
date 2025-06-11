@@ -11,6 +11,7 @@ import About from './pages/About';
 import Feedback from './pages/Feedback';
 import Settings from './pages/Settings';
 import Favorites from './pages/Favorites';
+import History from './pages/History';
 
 function App() {
   // 根据环境变量确定 basename
@@ -32,6 +33,7 @@ function App() {
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/history" element={<History />} />
         </Routes>
       </div>
     </Router>
