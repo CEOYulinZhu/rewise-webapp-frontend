@@ -10,6 +10,7 @@ import EditProfile from './pages/EditProfile';
 import About from './pages/About';
 import Feedback from './pages/Feedback';
 import Settings from './pages/Settings';
+import Favorites from './pages/Favorites';
 
 function App() {
   // 根据环境变量确定 basename
@@ -30,6 +31,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/favorites" element={<Favorites />} />
         </Routes>
       </div>
     </Router>

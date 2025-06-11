@@ -58,17 +58,15 @@ const Profile: React.FC = () => {
                 // 跳转到历史记录页面
                 break;
             case 'favorites':
-                // 跳转到收藏页面
+                navigate('/favorites');
                 break;
             case 'settings':
                 navigate('/settings');
                 break;
             case 'about':
-                // 跳转到关于我们页面
                 navigate('/about');
                 break;
             case 'feedback':
-                // 跳转到意见反馈页面
                 navigate('/feedback');
                 break;
             default:
