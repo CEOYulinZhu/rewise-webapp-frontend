@@ -166,7 +166,6 @@ const Favorites: React.FC = () => {
         // 按时间范围筛选
         if (selectedTimeRange !== 'all') {
             const now = new Date();
-            const itemDate = new Date();
 
             filtered = filtered.filter(item => {
                 const createdAt = new Date(item.createdAt);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, Share2, TrendingUp, DollarSign, Users, Copy, Star, Info, BarChart3, LineChart as LineChartIcon, Zap, FileText, Target, MapPin, Smartphone, ChevronDown, ChevronUp, TrendingDown, AlertCircle, CheckCircle2, Check } from 'lucide-react';
+import { ArrowLeft, Heart, Share2, TrendingUp, DollarSign, Users, Copy, Star, Info, BarChart3, LineChart as LineChartIcon, Zap, FileText, Target, ChevronDown, ChevronUp, AlertCircle, CheckCircle2, Check } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 
 interface LocationState {
@@ -22,7 +22,7 @@ const TradingDetail: React.FC = () => {
     const navigate = useNavigate();
     const { image, description } = (location.state as LocationState) || {};
     const [isFavorited, setIsFavorited] = useState(false);
-    const [selectedPlatform, setSelectedPlatform] = useState('闲鱼');
+
     const [activeTab, setActiveTab] = useState('overview');
     const [showPriceChart, setShowPriceChart] = useState(true); // 默认展开第一个卡片
     const [showSalesChart, setShowSalesChart] = useState(false);

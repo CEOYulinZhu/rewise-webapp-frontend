@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, Share2, MapPin, Phone, Globe, Clock, Navigation, Info, BarChart3, Map, Smartphone, Lightbulb, Star, Users, Leaf, Shield, DollarSign, Zap, Target, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, Heart, Share2, MapPin, Phone, Globe, Clock, Navigation, BarChart3, Map, Smartphone, Lightbulb, Star, Leaf, Shield, DollarSign, Zap, Target, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface LocationState {
     image: string;
