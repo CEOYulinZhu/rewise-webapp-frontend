@@ -5,6 +5,10 @@ import CreativeDetail from './pages/CreativeDetail';
 import RecycleDetail from './pages/RecycleDetail';
 import TradingDetail from './pages/TradingDetail';
 import Profile from './pages/Profile';
+import Login from './pages/Login';
+import EditProfile from './pages/EditProfile';
+import About from './pages/About';
+import Feedback from './pages/Feedback';
 
 function App() {
   // 根据环境变量确定 basename
@@ -20,6 +24,10 @@ function App() {
           <Route path="/detail/recycle" element={<RecycleDetail />} />
           <Route path="/detail/trading" element={<TradingDetail />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/feedback" element={<Feedback />} />
         </Routes>
       </div>
     </Router>
