@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import InstantScrollReset from './components/InstantScrollReset';
 import Index from './pages/Index';
 import Overview from './pages/Overview';
 import CreativeDetail from './pages/CreativeDetail';
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <Router basename={basename}>
+      <InstantScrollReset />
       <div className="App">
         <Routes>
           <Route path="/" element={<Index />} />
