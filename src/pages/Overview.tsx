@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { RefreshCw, Upload, Palette, Recycle, ShoppingBag, ChevronRight, Sparkles, Clock, TrendingUp, Lightbulb } from 'lucide-react';
+import { RefreshCw, Upload, Palette, Recycle, ShoppingBag, Sparkles, Clock, TrendingUp, Lightbulb } from 'lucide-react';
 import NavigationBar from '../components/NavigationBar';
+import RecommendationCard from '../components/RecommendationCard';
 
 interface LocationState {
     image: string;
@@ -12,13 +13,18 @@ const Overview: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { image, description } = (location.state as LocationState) || {};
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
 
-    // 简化的动画效果控制
-    useEffect(() => {
-        const timer = setTimeout(() => setIsLoaded(true), 100);
-        return () => clearTimeout(timer);
-    }, []);
+    // 切换卡片展开状态
+    const toggleCard = (cardId: string) => {
+        const newExpanded = new Set(expandedCards);
+        if (newExpanded.has(cardId)) {
+            newExpanded.delete(cardId);
+        } else {
+            newExpanded.add(cardId);
+        }
+        setExpandedCards(newExpanded);
+    };
 
     // 模拟推荐数据
     const recommendations = [
@@ -148,8 +154,7 @@ const Overview: React.FC = () => {
 
             {/* 物品信息预览 */}
             {(image || description) && (
-                <div className={`mx-4 mb-8 transition-all duration-300 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                    }`}>
+                <div className="mx-4 mb-6">
                     <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-white/50">
                         <div className="flex items-center space-x-5">
                             {image ? (
@@ -193,128 +198,22 @@ const Overview: React.FC = () => {
             )}
 
             {/* 推荐卡片列表 */}
-            <div className="px-4 space-y-5 pb-8">
-                {recommendations.map((rec, index) => {
-                    const Icon = rec.icon;
-                    const priorityBadge = getPriorityBadge(rec.priority);
-                    const PriorityIcon = priorityBadge.icon;
-
-                    return (
-                        <div
-                            key={rec.id}
-                            className={`transform transition-all duration-400 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-                                }`}
-                            style={{ transitionDelay: `${50 + index * 100}ms` }}
-                        >
-                            <div className={`relative bg-gradient-to-br ${rec.bgGradient} rounded-3xl shadow-xl ${rec.shadowColor} border ${rec.borderColor} overflow-hidden`}>
-                                {/* 背景装饰 */}
-                                <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-                                    <div className={`w-full h-full bg-gradient-to-br ${rec.gradient} rounded-full blur-2xl transform translate-x-8 -translate-y-8`} />
-                                </div>
-
-                                {/* 优先级徽章 */}
-                                <div className="absolute top-4 right-4 z-10">
-                                    <div className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-xs font-semibold ${priorityBadge.color} shadow-lg backdrop-blur-sm`}>
-                                        <PriorityIcon className="w-3 h-3" />
-                                        <span>{priorityBadge.text}</span>
-                                    </div>
-                                </div>
-
-                                <div className="relative p-6 pt-8">
-                                    <div className="flex items-start space-x-5">
-                                        {/* 图标和推荐度区域 */}
-                                        <div className="flex-shrink-0">
-                                            <div className={`relative w-18 h-18 bg-gradient-to-br ${rec.gradient} rounded-2xl flex items-center justify-center shadow-xl`}>
-                                                <Icon className="w-9 h-9 text-white drop-shadow-sm" />
-                                                {/* 光环效果 */}
-                                                <div className={`absolute inset-0 bg-gradient-to-br ${rec.gradient} rounded-2xl opacity-20 blur-md scale-110`} />
-                                            </div>
-
-                                            {/* 推荐度显示 */}
-                                            <div className="mt-4 text-center">
-                                                <div className={`text-2xl font-black bg-gradient-to-r ${rec.gradient} bg-clip-text text-transparent drop-shadow-sm`}>
-                                                    {rec.percentage}%
-                                                </div>
-                                                <div className="text-xs text-gray-600 font-medium mt-1">推荐度</div>
-                                            </div>
-                                        </div>
-
-                                        {/* 内容区域 */}
-                                        <div className="flex-1 min-w-0">
-                                            {/* 标题区域 */}
-                                            <div className="mb-4">
-                                                <h3 className="text-xl font-bold text-gray-800 mb-2">
-                                                    {rec.title}
-                                                </h3>
-                                                <p className="text-sm text-gray-600 font-medium">
-                                                    {rec.subtitle}
-                                                </p>
-                                            </div>
-
-                                            {/* 进度条 */}
-                                            <div className="mb-5">
-                                                <div className="flex justify-between items-center mb-2">
-                                                    <span className="text-xs text-gray-600 font-medium">推荐度</span>
-                                                    <span className="text-xs text-gray-700 font-semibold">{rec.percentage}%</span>
-                                                </div>
-                                                <div className="relative h-2.5 bg-white/40 rounded-full overflow-hidden">
-                                                    <div
-                                                        className={`h-full bg-gradient-to-r ${getProgressColor(rec.id)} transition-all duration-1000 ease-out shadow-sm relative`}
-                                                        style={{ width: `${rec.percentage}%` }}
-                                                    >
-                                                        {/* 进度条光泽效果 */}
-                                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* 关键信息 */}
-                                            <div className="mb-4 grid grid-cols-2 gap-3">
-                                                <div className="bg-white/50 rounded-xl p-3 backdrop-blur-sm">
-                                                    <div className="text-xs text-gray-600 mb-1">预计耗时</div>
-                                                    <div className="text-sm font-bold text-gray-800">{rec.estimatedTime}</div>
-                                                </div>
-                                                <div className="bg-white/50 rounded-xl p-3 backdrop-blur-sm">
-                                                    <div className="text-xs text-gray-600 mb-1">操作难度</div>
-                                                    <div className="text-sm font-bold text-gray-800">{rec.difficulty}</div>
-                                                </div>
-                                            </div>
-
-                                            {/* 推荐理由标签 */}
-                                            <div className="mb-5">
-                                                <div className="text-xs text-gray-600 font-medium mb-2">推荐理由</div>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {rec.reasons.map((reason, reasonIndex) => (
-                                                        <span
-                                                            key={reasonIndex}
-                                                            className="inline-flex items-center px-3 py-1.5 text-xs font-semibold bg-white/70 text-gray-700 rounded-full border border-white/50 backdrop-blur-sm shadow-sm"
-                                                        >
-                                                            {reason}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* 查看详情按钮 */}
-                                            <button
-                                                onClick={() => handleDetailClick(rec.route, rec)}
-                                                className={`w-full bg-gradient-to-r ${rec.gradient} text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center space-x-3 transition-all duration-200 active:scale-95 shadow-lg`}
-                                            >
-                                                <span>查看详细方案</span>
-                                                <ChevronRight className="w-5 h-5" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+            <div className="px-4 space-y-4 pb-8">
+                {recommendations.map((rec) => (
+                    <RecommendationCard
+                        key={rec.id}
+                        recommendation={rec}
+                        isExpanded={expandedCards.has(rec.id)}
+                        onToggle={() => toggleCard(rec.id)}
+                        onDetailClick={() => handleDetailClick(rec.route, rec)}
+                        priorityBadge={getPriorityBadge(rec.priority)}
+                        progressColor={getProgressColor(rec.id)}
+                    />
+                ))}
             </div>
 
             {/* 底部提示 */}
-            <div className={`px-4 pb-8 transition-all duration-300 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                }`}>
+            <div className="px-4 pb-8">
                 <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/50">
                     <div className="flex items-center justify-center space-x-2">
                         <Lightbulb className="w-4 h-4 text-amber-500" />
