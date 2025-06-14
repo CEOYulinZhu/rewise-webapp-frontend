@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Star, Send, HelpCircle, Bug, Lightbulb, AlertCircle } from 'lucide-react';
 import NavigationBar from '../components/NavigationBar';
 
 const Feedback: React.FC = () => {
-    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('feedback');
     const [feedbackType, setFeedbackType] = useState('suggestion');
     const [rating, setRating] = useState(0);
