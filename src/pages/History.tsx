@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    ArrowLeft,
     Clock,
     Filter,
     Search,
@@ -19,6 +18,7 @@ import {
     X,
     CheckSquare
 } from 'lucide-react';
+import NavigationBar from '../components/NavigationBar';
 import type { HistoryItem, DisposalPath, SortType, FilterType } from '../types/preferences';
 
 const History: React.FC = () => {
@@ -372,37 +372,24 @@ const History: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
             {/* 顶部导航 */}
-            <div className="flex items-center justify-between p-4 pt-8">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                    <ArrowLeft className="w-5 h-5 text-green-600" />
-                </button>
-                <h1 className="text-lg font-semibold text-gray-800">历史记录</h1>
-                <div className="flex items-center space-x-2">
-                    {isSelectionMode ? (
-                        <button
-                            onClick={() => {
+            <NavigationBar
+                title="历史记录"
+                actionButtons={[
+                    {
+                        icon: isSelectionMode ? X : CheckSquare,
+                        onClick: () => {
+                            if (isSelectionMode) {
                                 setIsSelectionMode(false);
                                 setSelectedItems(new Set());
-                            }}
-                            className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300"
-                            title="退出选择模式"
-                        >
-                            <X className="w-5 h-5 text-gray-600" />
-                        </button>
-                    ) : (
-                        <button
-                            onClick={() => setIsSelectionMode(true)}
-                            className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300"
-                            title="批量管理"
-                        >
-                            <CheckSquare className="w-5 h-5 text-green-600" />
-                        </button>
-                    )}
-                </div>
-            </div>
+                            } else {
+                                setIsSelectionMode(true);
+                            }
+                        },
+                        className: "hover:shadow-xl transition-all duration-300"
+                    }
+                ]}
+                className="hover:shadow-xl transition-all duration-300 hover:scale-105"
+            />
 
             <div className="px-4 pb-8 space-y-4">
                 {/* 搜索和筛选栏 */}

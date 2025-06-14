@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    ArrowLeft,
     Heart,
     Calendar,
     Palette,
@@ -20,6 +19,7 @@ import {
     SortDesc,
     CheckSquare
 } from 'lucide-react';
+import NavigationBar from '../components/NavigationBar';
 
 // 收藏项数据类型
 interface FavoriteItem {
@@ -263,42 +263,31 @@ const Favorites: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
             {/* 顶部导航 */}
-            <div className="flex items-center justify-between p-4 pt-8">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                    <ArrowLeft className="w-5 h-5 text-green-600" />
-                </button>
-                <div className="flex items-center space-x-2">
-                    <h1 className="text-lg font-semibold text-gray-800">我的收藏</h1>
-                    <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
-                        {favorites.length}
-                    </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                    {isSelectionMode ? (
-                        <button
-                            onClick={() => {
+            <NavigationBar
+                title="我的收藏"
+                centerContent={
+                    <div className="flex items-center space-x-2">
+                        <h1 className="text-lg font-semibold text-gray-800">我的收藏</h1>
+                        <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
+                            {favorites.length}
+                        </span>
+                    </div>
+                }
+                actionButtons={[
+                    {
+                        icon: isSelectionMode ? X : CheckSquare,
+                        onClick: () => {
+                            if (isSelectionMode) {
                                 setIsSelectionMode(false);
                                 setSelectedItems(new Set());
-                            }}
-                            className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300"
-                            title="退出选择模式"
-                        >
-                            <X className="w-5 h-5 text-gray-600" />
-                        </button>
-                    ) : (
-                        <button
-                            onClick={() => setIsSelectionMode(true)}
-                            className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300"
-                            title="批量管理"
-                        >
-                            <CheckSquare className="w-5 h-5 text-green-600" />
-                        </button>
-                    )}
-                </div>
-            </div>
+                            } else {
+                                setIsSelectionMode(true);
+                            }
+                        },
+                        className: "hover:shadow-xl transition-all duration-300"
+                    }
+                ]}
+            />
 
             {/* 搜索栏 */}
             <div className="px-4 mb-4">

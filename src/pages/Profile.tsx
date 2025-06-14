@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, User, History, Heart, Settings, Info, MessageCircle, ChevronRight, Edit3, LogIn, BarChart3, Lightbulb } from 'lucide-react';
+import { User, History, Heart, Settings, Info, MessageCircle, ChevronRight, Edit3, LogIn, BarChart3, Lightbulb } from 'lucide-react';
+import NavigationBar from '../components/NavigationBar';
 
 const Profile: React.FC = () => {
     const navigate = useNavigate();
-    const [isLoggedIn] = useState(true); // 这里可以从全局状态管理中获取登录状态
+    const [isLoggedIn] = useState(false); // 这里可以从全局状态管理中获取登录状态
     const [userStats] = useState({
         totalAnalyses: 23
     });
@@ -87,16 +88,7 @@ const Profile: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
             {/* 顶部导航 */}
-            <div className="flex items-center justify-between p-4 pt-8">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                    <ArrowLeft className="w-5 h-5 text-green-600" />
-                </button>
-                <h1 className="text-lg font-semibold text-gray-800">个人中心</h1>
-                <div className="w-10 h-10"></div> {/* 占位符保持居中 */}
-            </div>
+            <NavigationBar title="个人中心" />
 
             <div className="px-4 pb-8 space-y-6">
                 {/* 用户信息卡片 */}

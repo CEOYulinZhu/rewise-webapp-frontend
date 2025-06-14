@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, MessageCircle, Star, Send, HelpCircle, Bug, Lightbulb, AlertCircle } from 'lucide-react';
+import { MessageCircle, Star, Send, HelpCircle, Bug, Lightbulb, AlertCircle } from 'lucide-react';
+import NavigationBar from '../components/NavigationBar';
 
 const Feedback: React.FC = () => {
     const navigate = useNavigate();
@@ -79,16 +80,7 @@ const Feedback: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
             {/* 顶部导航 */}
-            <div className="flex items-center justify-between p-4 pt-8">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                    <ArrowLeft className="w-5 h-5 text-green-600" />
-                </button>
-                <h1 className="text-lg font-semibold text-gray-800">意见反馈</h1>
-                <div className="w-10 h-10"></div>
-            </div>
+            <NavigationBar title="意见反馈" />
 
             <div className="px-4 pb-8">
                 {/* 标签页导航 */}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, Share2, ExternalLink, Star, Clock, Wrench, BarChart3, Settings, BookOpen, Lightbulb, DollarSign, Palette, Sparkles, Leaf, Shield, Target, Users, Music, Camera, ChevronDown, ChevronUp } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { Heart, Share2, ExternalLink, Star, Clock, Wrench, BarChart3, Settings, BookOpen, Lightbulb, DollarSign, Palette, Sparkles, Leaf, Shield, Target, Users, Music, Camera, ChevronDown, ChevronUp } from 'lucide-react';
+import NavigationBar from '../components/NavigationBar';
 
 interface LocationState {
     image: string;
@@ -10,7 +11,6 @@ interface LocationState {
 
 const CreativeDetail: React.FC = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const { image, description } = (location.state as LocationState) || {};
     const [isFavorited, setIsFavorited] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
@@ -132,29 +132,22 @@ const CreativeDetail: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50">
             {/* 顶部导航 */}
-            <div className="relative flex items-center p-4 pt-8">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                    <ArrowLeft className="w-5 h-5 text-purple-600" />
-                </button>
-                <h1 className="absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-gray-800">创意改造方案</h1>
-                <div className="flex space-x-2 ml-auto">
-                    <button
-                        onClick={() => setIsFavorited(!isFavorited)}
-                        className="p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300"
-                    >
-                        <Heart className={`w-5 h-5 ${isFavorited ? 'text-red-500 fill-current' : 'text-gray-600'}`} />
-                    </button>
-                    <button
-                        onClick={handleShare}
-                        className="p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300"
-                    >
-                        <Share2 className="w-5 h-5 text-gray-600" />
-                    </button>
-                </div>
-            </div>
+            <NavigationBar
+                title="创意改造方案"
+                backButtonColor="text-purple-600"
+                actionButtons={[
+                    {
+                        icon: Heart,
+                        onClick: () => setIsFavorited(!isFavorited),
+                        isActive: isFavorited,
+                        activeColor: 'text-red-500 fill-current'
+                    },
+                    {
+                        icon: Share2,
+                        onClick: handleShare
+                    }
+                ]}
+            />
 
             <div className="px-4 pb-8">
                 {/* 物品信息和推荐度 - 始终显示 */}

@@ -1,9 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Shield, Users, FileText, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Shield, Users, FileText, AlertTriangle, CheckCircle } from 'lucide-react';
+import NavigationBar from '../components/NavigationBar';
 
 const UserAgreement: React.FC = () => {
-    const navigate = useNavigate();
 
     const sections = [
         {
@@ -50,16 +49,9 @@ const UserAgreement: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
             {/* 简洁的顶部导航 */}
-            <div className="flex items-center justify-between p-6 pt-12">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="p-3 rounded-full bg-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100"
-                >
-                    <ArrowLeft className="w-5 h-5 text-gray-600" />
-                </button>
-                <h1 className="text-lg font-semibold text-gray-800">用户协议</h1>
-                <div className="w-11"></div>
-            </div>
+            <NavigationBar
+                title="用户协议"
+            />
 
             <div className="px-6 pb-8">
                 <div className="max-w-lg mx-auto">

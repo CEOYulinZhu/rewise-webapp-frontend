@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, User, Phone, Camera, Save, Edit3, CheckCircle, Shield, Info } from 'lucide-react';
+import { User, Phone, Camera, Save, Edit3, CheckCircle, Shield, Info } from 'lucide-react';
+import NavigationBar from '../components/NavigationBar';
 
 const EditProfile: React.FC = () => {
     const navigate = useNavigate();
@@ -110,16 +111,7 @@ const EditProfile: React.FC = () => {
             )}
 
             {/* 顶部导航 */}
-            <div className="flex items-center justify-between p-4 pt-8">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                    <ArrowLeft className="w-5 h-5 text-green-600" />
-                </button>
-                <h1 className="text-lg font-semibold text-gray-800">编辑资料</h1>
-                <div className="w-10 h-10"></div>
-            </div>
+            <NavigationBar title="编辑资料" />
 
             <div className="px-4 pb-8 space-y-4">
                 <form onSubmit={handleSave} className="space-y-4">

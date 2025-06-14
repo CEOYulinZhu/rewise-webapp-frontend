@@ -184,12 +184,12 @@ const Login: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex flex-col">
             {/* 优化的顶部导航 */}
-            <div className="flex items-center justify-between p-6 pt-12">
+            <div className="flex items-center justify-between p-4 pt-8">
                 <button
                     onClick={() => navigate(-1)}
-                    className="p-3 rounded-full bg-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100"
+                    className="p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
-                    <ArrowLeft className="w-5 h-5 text-gray-600" />
+                    <ArrowLeft className="w-5 h-5 text-green-600" />
                 </button>
 
                 <div className="flex items-center justify-center flex-1">
@@ -215,7 +215,7 @@ const Login: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="w-11"></div>
+                <div className="w-10 h-10"></div>
             </div>
 
             {/* 主内容区域 */}

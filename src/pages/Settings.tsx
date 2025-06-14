@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, RotateCcw, Palette, Recycle, ShoppingBag, GripVertical, Info } from 'lucide-react';
+import { Save, RotateCcw, Palette, Recycle, ShoppingBag, GripVertical, Info } from 'lucide-react';
+import NavigationBar from '../components/NavigationBar';
 import type { PreferenceItem } from '../types/preferences';
 
 const Settings: React.FC = () => {
@@ -144,16 +145,7 @@ const Settings: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
             {/* 顶部导航 */}
-            <div className="flex items-center justify-between p-4 pt-8">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                    <ArrowLeft className="w-5 h-5 text-green-600" />
-                </button>
-                <h1 className="text-lg font-semibold text-gray-800">偏好设置</h1>
-                <div className="w-10 h-10"></div> {/* 占位符保持居中 */}
-            </div>
+            <NavigationBar title="偏好设置" />
 
             <div className="px-4 pb-8 space-y-6">
                 {/* 设置说明 */}

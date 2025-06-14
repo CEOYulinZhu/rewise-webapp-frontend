@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Camera, Upload, Send, User, Lightbulb, Sparkles, X, Image as ImageIcon, Plus, HelpCircle, ChevronUp, ChevronDown } from 'lucide-react';
+import { Camera, Upload, Send, User, Lightbulb, Sparkles, X, Image as ImageIcon, Plus, HelpCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Index: React.FC = () => {
