@@ -111,7 +111,7 @@ const Profile: React.FC = () => {
                             </div>
                             <button
                                 onClick={handleEditProfile}
-                                className="p-2 rounded-full bg-green-100 hover:bg-green-200 transition-all duration-300"
+                                className="p-2 rounded-full bg-green-100"
                             >
                                 <Edit3 className="w-5 h-5 text-green-600" />
                             </button>
@@ -127,7 +127,7 @@ const Profile: React.FC = () => {
                             </div>
                             <button
                                 onClick={handleLogin}
-                                className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300 hover:scale-105"
+                                className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-xl font-medium"
                             >
                                 <LogIn className="w-4 h-4" />
                                 <span>登录</span>
@@ -165,13 +165,13 @@ const Profile: React.FC = () => {
                                 <button
                                     key={item.id}
                                     onClick={() => handleMenuClick(item.id)}
-                                    className="w-full flex items-center space-x-4 p-4 bg-gradient-to-r from-white to-green-50 rounded-2xl hover:shadow-lg transition-all duration-300 border border-green-100 hover:border-green-200 group"
+                                    className="w-full flex items-center space-x-4 p-4 bg-gradient-to-r from-white to-green-50 rounded-2xl border border-green-100 group"
                                 >
-                                    <div className={`w-12 h-12 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300`}>
+                                    <div className={`w-12 h-12 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center shadow-lg`}>
                                         <Icon className="w-6 h-6 text-white" />
                                     </div>
                                     <div className="flex-1 text-left">
-                                        <h4 className="font-semibold text-gray-800 group-hover:text-gray-900">{item.title}</h4>
+                                        <h4 className="font-semibold text-gray-800">{item.title}</h4>
                                         <p className="text-sm text-gray-600">{item.subtitle}</p>
                                     </div>
                                     <div className="flex items-center space-x-2">
@@ -180,7 +180,7 @@ const Profile: React.FC = () => {
                                                 {item.count}
                                             </span>
                                         )}
-                                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors duration-300" />
+                                        <ChevronRight className="w-5 h-5 text-gray-400" />
                                     </div>
                                 </button>
                             );
@@ -198,16 +198,16 @@ const Profile: React.FC = () => {
                                 <button
                                     key={item.id}
                                     onClick={() => handleMenuClick(item.id)}
-                                    className="w-full flex items-center space-x-4 p-4 bg-gradient-to-r from-white to-gray-50 rounded-2xl hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-200 group"
+                                    className="w-full flex items-center space-x-4 p-4 bg-gradient-to-r from-white to-gray-50 rounded-2xl border border-gray-100 group"
                                 >
-                                    <div className={`w-10 h-10 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300`}>
+                                    <div className={`w-10 h-10 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center shadow-lg`}>
                                         <Icon className="w-5 h-5 text-white" />
                                     </div>
                                     <div className="flex-1 text-left">
-                                        <h4 className="font-medium text-gray-800 group-hover:text-gray-900">{item.title}</h4>
+                                        <h4 className="font-medium text-gray-800">{item.title}</h4>
                                         <p className="text-sm text-gray-600">{item.subtitle}</p>
                                     </div>
-                                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors duration-300" />
+                                    <ChevronRight className="w-4 h-4 text-gray-400" />
                                 </button>
                             );
                         })}

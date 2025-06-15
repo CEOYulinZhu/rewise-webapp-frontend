@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Save, RotateCcw, Palette, Recycle, ShoppingBag, GripVertical, Info } from 'lucide-react';
 import NavigationBar from '../components/NavigationBar';
 import type { PreferenceItem } from '../types/preferences';
 
 const Settings: React.FC = () => {
-    const navigate = useNavigate();
 
     // 默认的处置路径配置
     const defaultPreferences: PreferenceItem[] = [
@@ -111,7 +109,7 @@ const Settings: React.FC = () => {
 
         // 显示保存成功提示
         const toast = document.createElement('div');
-        toast.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+        toast.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
         toast.textContent = '设置已保存';
         document.body.appendChild(toast);
 
@@ -175,10 +173,10 @@ const Settings: React.FC = () => {
                                     onDragEnd={handleDragEnd}
                                     onDragOver={handleDragOver}
                                     onDrop={(e) => handleDrop(e, index)}
-                                    className={`relative px-3 py-5 rounded-xl border transition-all duration-200 ${preference.enabled
+                                    className={`relative px-3 py-5 rounded-xl border ${preference.enabled
                                         ? 'bg-white border-green-200 shadow-sm'
                                         : 'bg-gray-50 border-gray-200'
-                                        } ${draggedItem === index ? 'opacity-50 scale-95' : 'hover:shadow-md'} cursor-move`}
+                                        } ${draggedItem === index ? 'opacity-50 scale-95' : ''} cursor-move`}
                                 >
                                     <div className="flex items-center space-x-3">
                                         {/* 优先级和拖拽手柄 */}
@@ -210,7 +208,7 @@ const Settings: React.FC = () => {
                                             <button
                                                 onClick={() => moveUp(index)}
                                                 disabled={index === 0}
-                                                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+                                                className="p-2 rounded-lg bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
                                             >
                                                 <svg className="w-3.5 h-3.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
@@ -221,7 +219,7 @@ const Settings: React.FC = () => {
                                             <button
                                                 onClick={() => moveDown(index)}
                                                 disabled={index === preferences.length - 1}
-                                                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+                                                className="p-2 rounded-lg bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
                                             >
                                                 <svg className="w-3.5 h-3.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -231,12 +229,12 @@ const Settings: React.FC = () => {
                                             {/* 启用/禁用开关 */}
                                             <button
                                                 onClick={() => togglePreference(index)}
-                                                className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ${preference.enabled
+                                                className={`relative inline-flex h-5 w-9 items-center rounded-full ${preference.enabled
                                                     ? 'bg-green-500'
                                                     : 'bg-gray-300'
                                                     }`}
                                             >
-                                                <div className={`inline-block h-3 w-3 transform rounded-full bg-white transition duration-200 ${preference.enabled ? 'translate-x-5' : 'translate-x-1'
+                                                <div className={`inline-block h-3 w-3 transform rounded-full bg-white ${preference.enabled ? 'translate-x-5' : 'translate-x-1'
                                                     }`} />
                                             </button>
                                         </div>
@@ -252,8 +250,8 @@ const Settings: React.FC = () => {
                     <button
                         onClick={handleSave}
                         disabled={!hasUnsavedChanges}
-                        className={`flex-1 flex items-center justify-center space-x-2 py-4 px-6 rounded-xl font-medium transition-all duration-200 ${hasUnsavedChanges
-                            ? 'bg-green-500 text-white shadow-md hover:bg-green-600 hover:shadow-lg'
+                        className={`flex-1 flex items-center justify-center space-x-2 py-4 px-6 rounded-xl font-medium ${hasUnsavedChanges
+                            ? 'bg-green-500 text-white shadow-md'
                             : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                             }`}
                     >
@@ -263,7 +261,7 @@ const Settings: React.FC = () => {
 
                     <button
                         onClick={handleReset}
-                        className="flex items-center justify-center space-x-2 py-4 px-6 rounded-xl font-medium bg-white text-gray-700 border border-gray-300 hover:border-gray-400 hover:shadow-md transition-all duration-200"
+                        className="flex items-center justify-center space-x-2 py-4 px-6 rounded-xl font-medium bg-white text-gray-700 border border-gray-300"
                     >
                         <RotateCcw className="w-5 h-5" />
                         <span>重置</span>

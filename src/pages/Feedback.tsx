@@ -86,9 +86,9 @@ const Feedback: React.FC = () => {
                     <div className="flex space-x-2">
                         <button
                             onClick={() => setActiveTab('feedback')}
-                            className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-2xl font-medium transition-all duration-300 ${activeTab === 'feedback'
+                            className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-2xl font-medium ${activeTab === 'feedback'
                                 ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md'
-                                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                                : 'text-gray-600'
                                 }`}
                         >
                             <MessageCircle className="w-5 h-5" />
@@ -96,9 +96,9 @@ const Feedback: React.FC = () => {
                         </button>
                         <button
                             onClick={() => setActiveTab('questions')}
-                            className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-2xl font-medium transition-all duration-300 ${activeTab === 'questions'
+                            className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-2xl font-medium ${activeTab === 'questions'
                                 ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md'
-                                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                                : 'text-gray-600'
                                 }`}
                         >
                             <HelpCircle className="w-5 h-5" />
@@ -120,9 +120,9 @@ const Feedback: React.FC = () => {
                                         <button
                                             key={type.id}
                                             onClick={() => setFeedbackType(type.id)}
-                                            className={`flex items-center space-x-2 px-4 py-3 rounded-xl border-2 transition-all duration-300 ${feedbackType === type.id
+                                            className={`flex items-center space-x-2 px-4 py-3 rounded-xl border-2 ${feedbackType === type.id
                                                 ? 'border-green-400 bg-green-50 shadow-md'
-                                                : 'border-gray-200 bg-white hover:border-green-300'
+                                                : 'border-gray-200 bg-white'
                                                 }`}
                                         >
                                             <div className={`w-8 h-8 bg-gradient-to-br ${type.color} rounded-lg flex items-center justify-center shadow-sm`}>
@@ -152,12 +152,12 @@ const Feedback: React.FC = () => {
                                             <button
                                                 key={star}
                                                 onClick={() => setRating(star)}
-                                                className="transition-all duration-200 hover:scale-110"
+                                                className=""
                                             >
                                                 <Star
                                                     className={`w-6 h-6 ${star <= rating
                                                         ? 'text-yellow-400 fill-yellow-400'
-                                                        : 'text-gray-300 hover:text-gray-400'
+                                                        : 'text-gray-300'
                                                         }`}
                                                 />
                                             </button>
@@ -194,9 +194,9 @@ const Feedback: React.FC = () => {
                                 <button
                                     onClick={handleSubmit}
                                     disabled={isSubmitting || !content.trim()}
-                                    className={`w-full flex items-center justify-center space-x-2 py-4 rounded-xl font-semibold transition-all duration-300 ${isSubmitting || !content.trim()
+                                    className={`w-full flex items-center justify-center space-x-2 py-4 rounded-xl font-semibold ${isSubmitting || !content.trim()
                                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                        : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:shadow-lg hover:scale-105 active:scale-95'
+                                        : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
                                         } shadow-md`}
                                 >
                                     {isSubmitting ? (
@@ -222,7 +222,7 @@ const Feedback: React.FC = () => {
                             {faqs.map((faq, index) => (
                                 <div
                                     key={index}
-                                    className="p-5 bg-gradient-to-r from-white to-green-50/50 rounded-2xl border border-green-100/30 hover:shadow-md transition-all duration-300"
+                                    className="p-5 bg-gradient-to-r from-white to-green-50/50 rounded-2xl border border-green-100/30"
                                 >
                                     <h4 className="font-bold text-gray-800 mb-3 flex items-start">
                                         <AlertCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />

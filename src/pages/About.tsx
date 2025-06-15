@@ -75,7 +75,7 @@ const About: React.FC = () => {
                             return (
                                 <div
                                     key={index}
-                                    className="text-center p-4 bg-gradient-to-br from-white to-green-50/50 rounded-2xl border border-green-100/30 hover:shadow-md transition-all duration-300"
+                                    className="text-center p-4 bg-gradient-to-br from-white to-green-50/50 rounded-2xl border border-green-100/30"
                                 >
                                     <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center shadow-md mx-auto mb-3">
                                         <Icon className="w-6 h-6 text-white" />
