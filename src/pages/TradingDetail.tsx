@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Heart, Share2, TrendingUp, DollarSign, Users, Copy, Star, Info, BarChart3, LineChart as LineChartIcon, Zap, FileText, Target, ChevronDown, ChevronUp, AlertCircle, CheckCircle2, Check } from 'lucide-react';
-import NavigationBar from '../components/NavigationBar';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import DetailPageLayout from '../components/DetailPageLayout';
+import type { TabConfig } from '../components/DetailPageLayout';
+import { tradingTheme } from '../config/detailPageThemes';
 
 interface LocationState {
     image: string;
@@ -11,7 +13,7 @@ interface LocationState {
 }
 
 // 标签页定义
-const tabs = [
+const tabs: TabConfig[] = [
     { id: 'overview', name: '概览', icon: BarChart3 },
     { id: 'market', name: '分析', icon: LineChartIcon },
     { id: 'platforms', name: '对比', icon: Zap },
@@ -577,93 +579,32 @@ const TradingDetail: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
-            {/* 顶部导航 */}
-            <NavigationBar
-                title="二手交易方案"
-                backButtonColor="text-blue-600"
-                actionButtons={[
-                    {
-                        icon: Heart,
-                        onClick: () => setIsFavorited(!isFavorited),
-                        isActive: isFavorited,
-                        activeColor: 'text-red-500 fill-current'
-                    },
-                    {
-                        icon: Share2,
-                        onClick: handleShare
-                    }
-                ]}
-            />
-
-            <div className="px-4 pb-8">
-                {/* 物品信息和推荐度 - 始终显示 */}
-                {(image || description) && (
-                    <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-blue-100 mb-6">
-                        <div className="flex items-center space-x-4 mb-4">
-                            {image ? (
-                                <img
-                                    src={image}
-                                    alt="物品图片"
-                                    className="w-20 h-20 object-cover rounded-2xl shadow-lg"
-                                />
-                            ) : (
-                                <div className="w-20 h-20 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl shadow-lg flex items-center justify-center">
-                                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                </div>
-                            )}
-                            <div className="flex-1">
-                                <h3 className="font-bold text-gray-800 mb-1">您的物品</h3>
-                                <p className="text-sm text-gray-600 mb-2">
-                                    {description || '待出售物品'}
-                                </p>
-                                <div className="flex items-center space-x-2">
-                                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                                        60%
-                                    </div>
-                                    <span className="text-sm text-gray-600">交易推荐度</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="h-2 bg-blue-100 rounded-full overflow-hidden">
-                            <div
-                                className="h-full bg-gradient-to-r from-blue-400 to-cyan-500 transition-all duration-1000 ease-out"
-                                style={{ width: '60%' }}
-                            />
-                        </div>
-                    </div>
-                )}
-
-                {/* 标签页导航 */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg border border-blue-100 mb-6">
-                    <div className="flex space-x-1">
-                        {tabs.map((tab) => {
-                            const IconComponent = tab.icon;
-                            return (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => setActiveTab(tab.id)}
-                                    className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl font-medium text-sm transition-all duration-300 ${activeTab === tab.id
-                                        ? 'bg-gradient-to-br from-blue-500 to-cyan-600 text-white shadow-lg transform scale-105'
-                                        : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
-                                        }`}
-                                >
-                                    <IconComponent className="w-4 h-4" />
-                                    <span>{tab.name}</span>
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
-
-                {/* 标签页内容 */}
-                <div>
-                    {renderTabContent()}
-                </div>
-            </div>
-        </div>
+        <DetailPageLayout
+            title="您的物品"
+            image={image}
+            description={description || '待出售物品'}
+            recommendationScore={60}
+            recommendationLabel="交易推荐度"
+            theme={tradingTheme}
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            renderTabContent={renderTabContent}
+            navigationTitle="二手交易方案"
+            navigationBackButtonColor="text-blue-600"
+            navigationActionButtons={[
+                {
+                    icon: Heart,
+                    onClick: () => setIsFavorited(!isFavorited),
+                    isActive: isFavorited,
+                    activeColor: 'text-red-500 fill-current'
+                },
+                {
+                    icon: Share2,
+                    onClick: handleShare
+                }
+            ]}
+        />
     );
 };
 
