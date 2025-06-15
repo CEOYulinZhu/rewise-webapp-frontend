@@ -14,12 +14,12 @@ import {
     Trash2,
     Check,
     X,
-    Search,
-    SortAsc,
-    SortDesc,
     CheckSquare
 } from 'lucide-react';
 import NavigationBar from '../components/NavigationBar';
+import SearchBox from '../components/SearchBox';
+import FilterPanel, { type FilterGroup } from '../components/FilterPanel';
+import TimeSortButton from '../components/TimeSortButton';
 
 // 收藏项数据类型
 interface FavoriteItem {
@@ -148,6 +148,46 @@ const Favorites: React.FC = () => {
     const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+    // 筛选组配置
+    const filterGroups: FilterGroup[] = [
+        {
+            id: 'category',
+            title: '处置类别',
+            options: categoryOptions.map(option => ({
+                id: option.id,
+                name: option.name,
+                icon: option.icon,
+                color: option.color
+            })),
+            selectedValue: selectedCategory,
+            onSelect: setSelectedCategory,
+            type: 'gradient'
+        },
+        {
+            id: 'contentType',
+            title: '内容类型',
+            options: contentTypeOptions.map(option => ({
+                id: option.id,
+                name: option.name,
+                icon: option.icon
+            })),
+            selectedValue: selectedContentType,
+            onSelect: setSelectedContentType,
+            type: 'colored'
+        },
+        {
+            id: 'timeRange',
+            title: '收藏时间',
+            options: timeOptions.map(option => ({
+                id: option.id,
+                name: option.name
+            })),
+            selectedValue: selectedTimeRange,
+            onSelect: setSelectedTimeRange,
+            type: 'default'
+        }
+    ];
 
     // 筛选和排序逻辑
     const filteredFavorites = useMemo(() => {
@@ -284,33 +324,17 @@ const Favorites: React.FC = () => {
                                 setIsSelectionMode(true);
                             }
                         },
-                        className: "hover:shadow-xl transition-all duration-300"
+                        className: "hover:shadow-xl"
                     }
                 ]}
             />
 
             {/* 搜索栏 */}
-            <div className="px-4 mb-4">
-                <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-green-500" />
-                    <input
-                        type="text"
-                        placeholder="搜索收藏内容..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-12 py-3 bg-white border border-green-200 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-300 focus:shadow-xl transition-all duration-300"
-                    />
-                    {searchQuery && (
-                        <button
-                            onClick={() => setSearchQuery('')}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-100 transition-colors"
-                            title="清除搜索"
-                        >
-                            <X className="w-4 h-4 text-gray-500" />
-                        </button>
-                    )}
-                </div>
-            </div>
+            <SearchBox
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="搜索收藏内容..."
+            />
 
             {/* 筛选和视图切换 */}
             <div className="px-4 mb-6">
@@ -318,114 +342,46 @@ const Favorites: React.FC = () => {
                     <div className="flex items-center space-x-2">
                         <button
                             onClick={() => setIsFilterOpen(!isFilterOpen)}
-                            className="flex items-center space-x-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-green-100 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                            className="flex items-center space-x-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-green-100 rounded-xl shadow-lg"
                         >
                             <Filter className="w-4 h-4 text-green-600" />
                             <span className="text-sm text-gray-700">筛选</span>
                         </button>
-                        <button
-                            onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
-                            className="flex items-center space-x-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-green-100 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                        >
-                            {sortOrder === 'desc' ?
-                                <SortDesc className="w-4 h-4 text-green-600" /> :
-                                <SortAsc className="w-4 h-4 text-green-600" />
-                            }
-                            <span className="text-sm text-gray-700">时间</span>
-                        </button>
+                        <TimeSortButton
+                            sortOrder={sortOrder}
+                            onToggle={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+                        />
                     </div>
                     <div className="flex items-center space-x-2">
                         <button
                             onClick={() => setViewMode('grid')}
-                            className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'grid'
+                            className={`p-2 rounded-lg ${viewMode === 'grid'
                                 ? 'bg-green-100 text-green-600'
-                                : 'bg-white/90 text-gray-600 hover:bg-green-50'
+                                : 'bg-white/90 text-gray-600'
                                 }`}
                         >
                             <Grid3X3 className="w-4 h-4" />
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'list'
+                            className={`p-2 rounded-lg ${viewMode === 'list'
                                 ? 'bg-green-100 text-green-600'
-                                : 'bg-white/90 text-gray-600 hover:bg-green-50'
+                                : 'bg-white/90 text-gray-600'
                                 }`}
                         >
                             <List className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
-
-                {/* 筛选面板 */}
-                {isFilterOpen && (
-                    <div className="mt-4 p-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-green-100">
-                        {/* 按类别筛选 */}
-                        <div className="mb-4">
-                            <h3 className="text-sm font-medium text-gray-700 mb-2">处置类别</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {categoryOptions.map((option) => {
-                                    const Icon = option.icon;
-                                    return (
-                                        <button
-                                            key={option.id}
-                                            onClick={() => setSelectedCategory(option.id)}
-                                            className={`flex items-center space-x-2 px-3 py-2 rounded-xl transition-all duration-300 ${selectedCategory === option.id
-                                                ? `bg-gradient-to-r ${option.color} text-white shadow-lg`
-                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                }`}
-                                        >
-                                            <Icon className="w-4 h-4" />
-                                            <span className="text-sm">{option.name}</span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                        {/* 按内容类型筛选 */}
-                        <div className="mb-4">
-                            <h3 className="text-sm font-medium text-gray-700 mb-2">内容类型</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {contentTypeOptions.map((option) => {
-                                    const Icon = option.icon;
-                                    return (
-                                        <button
-                                            key={option.id}
-                                            onClick={() => setSelectedContentType(option.id)}
-                                            className={`flex items-center space-x-2 px-3 py-2 rounded-xl transition-all duration-300 ${selectedContentType === option.id
-                                                ? 'bg-blue-500 text-white shadow-lg'
-                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                }`}
-                                        >
-                                            <Icon className="w-4 h-4" />
-                                            <span className="text-sm">{option.name}</span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                        {/* 按时间筛选 */}
-                        <div>
-                            <h3 className="text-sm font-medium text-gray-700 mb-2">收藏时间</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {timeOptions.map((option) => (
-                                    <button
-                                        key={option.id}
-                                        onClick={() => setSelectedTimeRange(option.id)}
-                                        className={`px-3 py-2 rounded-xl transition-all duration-300 ${selectedTimeRange === option.id
-                                            ? 'bg-purple-500 text-white shadow-lg'
-                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                            }`}
-                                    >
-                                        <span className="text-sm">{option.name}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
+
+            {/* 筛选面板 */}
+            <FilterPanel
+                isOpen={isFilterOpen}
+                onToggle={() => setIsFilterOpen(!isFilterOpen)}
+                filterGroups={filterGroups}
+                showAsDropdown={false}
+            />
 
             {/* 批量操作工具栏 */}
             {isSelectionMode && (
@@ -468,7 +424,7 @@ const Favorites: React.FC = () => {
                         <p className="text-gray-600 mb-6">收藏您感兴趣的处置方案，方便随时查看</p>
                         <button
                             onClick={() => navigate('/')}
-                            className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                            className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl font-medium shadow-lg"
                         >
                             去发现内容
                         </button>
@@ -488,15 +444,15 @@ const Favorites: React.FC = () => {
                                 <div
                                     key={item.id}
                                     onClick={() => handleItemClick(item)}
-                                    className={`relative bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border transition-all duration-300 cursor-pointer group ${isSelected
+                                    className={`relative bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border cursor-pointer group ${isSelected
                                         ? 'border-green-500 ring-2 ring-green-200'
-                                        : 'border-green-100 hover:border-green-200 hover:shadow-2xl'
+                                        : 'border-green-100'
                                         } ${viewMode === 'list' ? 'p-4' : 'p-4'
                                         }`}
                                 >
                                     {/* 选择指示器 */}
                                     {isSelectionMode && (
-                                        <div className={`absolute ${viewMode === 'list' ? 'top-2 right-2' : 'top-2 right-2'} w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 z-10 ${isSelected
+                                        <div className={`absolute ${viewMode === 'list' ? 'top-2 right-2' : 'top-2 right-2'} w-6 h-6 rounded-full border-2 flex items-center justify-center z-10 ${isSelected
                                             ? 'bg-green-500 border-green-500'
                                             : 'bg-white border-gray-300'
                                             }`}>
@@ -518,18 +474,11 @@ const Favorites: React.FC = () => {
 
                                         {/* 内容区域 */}
                                         <div className="flex-1">
-                                            {/* 标题和类别 */}
-                                            <div className={`flex ${viewMode === 'list' ? 'items-start' : 'items-start'} ${isSelectionMode ? 'pr-8' : 'pr-0'}`}>
-                                                <div className="flex-1">
-                                                    <h3 className="font-semibold text-gray-800 text-sm group-hover:text-gray-900 transition-colors duration-300 mb-1">
-                                                        {item.title}
-                                                    </h3>
-                                                </div>
-                                                {CategoryIcon && !isSelectionMode && (
-                                                    <div className={`ml-3 ${viewMode === 'list' ? 'mt-[-9px]' : ''} p-2 rounded-lg bg-gradient-to-r ${categoryInfo.color} shadow-lg flex-shrink-0`}>
-                                                        <CategoryIcon className="w-4 h-4 text-white" />
-                                                    </div>
-                                                )}
+                                            {/* 标题 */}
+                                            <div className={`${isSelectionMode ? 'pr-8' : 'pr-0'}`}>
+                                                <h3 className="font-semibold text-gray-800 text-sm mb-1">
+                                                    {item.title}
+                                                </h3>
                                             </div>
 
                                             {/* 文字内容 */}
@@ -556,8 +505,8 @@ const Favorites: React.FC = () => {
                                                         {categoryInfo?.name}
                                                     </span>
 
-                                                    {/* 选择模式下显示类别图标 */}
-                                                    {CategoryIcon && isSelectionMode && (
+                                                    {/* 处置类别图标 - 始终显示在标签区域 */}
+                                                    {CategoryIcon && (
                                                         <div className={`p-1 rounded-md bg-gradient-to-r ${categoryInfo.color} shadow-sm`}>
                                                             <CategoryIcon className="w-3 h-3 text-white" />
                                                         </div>

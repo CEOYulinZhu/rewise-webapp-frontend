@@ -2,8 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Clock,
-    Filter,
-    Search,
     Calendar,
     Image as ImageIcon,
     Type,
@@ -13,12 +11,17 @@ import {
     ShoppingBag,
     ChevronDown,
     ChevronUp,
+    Filter,
+    Tags,
     Trash2,
     Check,
     X,
     CheckSquare
 } from 'lucide-react';
 import NavigationBar from '../components/NavigationBar';
+import SearchBox from '../components/SearchBox';
+import FilterPanel, { type FilterGroup } from '../components/FilterPanel';
+import TimeSortButton from '../components/TimeSortButton';
 import type { HistoryItem, DisposalPath, SortType, FilterType } from '../types/preferences';
 
 const History: React.FC = () => {
@@ -31,6 +34,24 @@ const History: React.FC = () => {
     const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
     const [isSelectionMode, setIsSelectionMode] = useState(false);
     const [showFilters, setShowFilters] = useState(false);
+    const [timeSortOrder, setTimeSortOrder] = useState<'asc' | 'desc'>('desc');
+
+    // 筛选组配置（移除排序方式，只保留内容分类）
+    const filterGroups: FilterGroup[] = [
+        {
+            id: 'category',
+            title: '内容分类',
+            options: [
+                { id: 'all', name: '全部', icon: Calendar, color: 'from-gray-500 to-gray-600' },
+                { id: 'creative', name: '创意改造', icon: Palette, color: 'from-purple-500 to-pink-500' },
+                { id: 'recycle', name: '捐赠回收', icon: Recycle, color: 'from-green-500 to-emerald-500' },
+                { id: 'trading', name: '二手交易', icon: ShoppingBag, color: 'from-blue-500 to-cyan-500' }
+            ],
+            selectedValue: filterType,
+            onSelect: (value) => setFilterType(value as FilterType),
+            type: 'gradient'
+        }
+    ];
 
     // 模拟历史数据
     const [historyData, setHistoryData] = useState<HistoryItem[]>([
@@ -251,15 +272,17 @@ const History: React.FC = () => {
 
         // 排序
         if (sortType === 'time') {
-            filtered = [...filtered].sort((a, b) =>
-                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-            );
+            filtered = [...filtered].sort((a, b) => {
+                const dateA = new Date(a.timestamp).getTime();
+                const dateB = new Date(b.timestamp).getTime();
+                return timeSortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+            });
         } else if (sortType === 'category') {
             filtered = [...filtered].sort((a, b) => a.category.localeCompare(b.category));
         }
 
         return filtered;
-    }, [historyData, searchQuery, filterType, sortType]);
+    }, [historyData, searchQuery, filterType, sortType, timeSortOrder]);
 
     // 切换项目展开状态
     const toggleExpand = (itemId: string) => {
@@ -385,97 +408,62 @@ const History: React.FC = () => {
                                 setIsSelectionMode(true);
                             }
                         },
-                        className: "hover:shadow-xl transition-all duration-300"
+                        className: "hover:shadow-xl"
                     }
                 ]}
-                className="hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="hover:shadow-xl"
+            />
+
+            {/* 搜索栏 */}
+            <SearchBox
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="搜索历史记录..."
+            />
+
+            {/* 筛选和排序按钮 */}
+            <div className="px-4 mb-6">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                        <button
+                            onClick={() => setShowFilters(!showFilters)}
+                            className="flex items-center space-x-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-green-100 rounded-xl shadow-lg"
+                        >
+                            <Filter className="w-4 h-4 text-green-600" />
+                            <span className="text-sm text-gray-700">筛选</span>
+                        </button>
+                        <TimeSortButton
+                            sortOrder={timeSortOrder}
+                            onToggle={() => setTimeSortOrder(timeSortOrder === 'desc' ? 'asc' : 'desc')}
+                        />
+                        <button
+                            onClick={() => setSortType(sortType === 'time' ? 'category' : 'time')}
+                            className="flex items-center space-x-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-green-100 rounded-xl shadow-lg"
+                        >
+                            {sortType === 'time' ?
+                                <Clock className="w-4 h-4 text-green-600" /> :
+                                <Tags className="w-4 h-4 text-green-600" />
+                            }
+                            <span className="text-sm text-gray-700">{sortType === 'time' ? '时间' : '分类'}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* 筛选面板 */}
+            <FilterPanel
+                isOpen={showFilters}
+                onToggle={() => setShowFilters(!showFilters)}
+                filterGroups={filterGroups}
+                showAsDropdown={false}
             />
 
             <div className="px-4 pb-8 space-y-4">
-                {/* 搜索和筛选栏 */}
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-green-100">
-                    {/* 搜索框 */}
-                    <div className="relative mb-4">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="搜索历史记录..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 bg-white border border-green-200 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-300 focus:shadow-xl transition-all duration-300"
-                        />
+                {/* 记录统计 */}
+                <div className="text-center">
+                    <div className="text-sm text-gray-500">
+                        共 {filteredAndSortedData.length} 条记录
                     </div>
-
-                    {/* 筛选按钮 */}
-                    <div className="flex items-center justify-between">
-                        <button
-                            onClick={() => setShowFilters(!showFilters)}
-                            className="flex items-center space-x-2 px-4 py-2 bg-green-100 hover:bg-green-200 rounded-xl transition-all duration-300"
-                        >
-                            <Filter className="w-4 h-4 text-green-600" />
-                            <span className="text-sm font-medium text-green-600">筛选</span>
-                            {showFilters ? (
-                                <ChevronUp className="w-4 h-4 text-green-600" />
-                            ) : (
-                                <ChevronDown className="w-4 h-4 text-green-600" />
-                            )}
-                        </button>
-
-                        <div className="text-sm text-gray-500">
-                            共 {filteredAndSortedData.length} 条记录
-                        </div>
-                    </div>
-
-                    {/* 筛选选项 */}
-                    {showFilters && (
-                        <div className="mt-4 pt-4 border-t border-gray-200">
-                            <div className="space-y-3">
-                                {/* 排序选项 */}
-                                <div>
-                                    <h4 className="text-sm font-medium text-gray-700 mb-2">排序方式</h4>
-                                    <div className="flex space-x-2">
-                                        <button
-                                            onClick={() => setSortType('time')}
-                                            className={`px-3 py-1 rounded-lg text-xs font-medium transition-all duration-300 ${sortType === 'time'
-                                                ? 'bg-green-500 text-white'
-                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                }`}
-                                        >
-                                            按时间
-                                        </button>
-                                        <button
-                                            onClick={() => setSortType('category')}
-                                            className={`px-3 py-1 rounded-lg text-xs font-medium transition-all duration-300 ${sortType === 'category'
-                                                ? 'bg-green-500 text-white'
-                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                }`}
-                                        >
-                                            按分类
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* 分类筛选 */}
-                                <div>
-                                    <h4 className="text-sm font-medium text-gray-700 mb-2">内容分类</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {(['all', 'creative', 'recycle', 'trading'] as FilterType[]).map((category) => (
-                                            <button
-                                                key={category}
-                                                onClick={() => setFilterType(category)}
-                                                className={`px-3 py-1 rounded-lg text-xs font-medium transition-all duration-300 ${filterType === category
-                                                    ? 'bg-green-500 text-white'
-                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                    }`}
-                                            >
-                                                {category === 'all' ? '全部' : getCategoryName(category as any)}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </div>
 
                 {/* 批量操作栏 */}
@@ -485,7 +473,7 @@ const History: React.FC = () => {
                             <div className="flex items-center space-x-3">
                                 <button
                                     onClick={toggleSelectAll}
-                                    className="flex items-center space-x-2 px-4 py-2 bg-green-100 hover:bg-green-200 rounded-xl transition-all duration-300"
+                                    className="flex items-center space-x-2 px-4 py-2 bg-green-100 rounded-xl"
                                 >
                                     <Check className="w-4 h-4 text-green-600" />
                                     <span className="text-sm font-medium text-green-600">
@@ -499,7 +487,7 @@ const History: React.FC = () => {
                             {selectedItems.size > 0 && (
                                 <button
                                     onClick={deleteSelected}
-                                    className="flex items-center space-x-2 px-4 py-2 bg-red-100 hover:bg-red-200 rounded-xl transition-all duration-300"
+                                    className="flex items-center space-x-2 px-4 py-2 bg-red-100 rounded-xl"
                                 >
                                     <Trash2 className="w-4 h-4 text-red-600" />
                                     <span className="text-sm font-medium text-red-600">删除</span>
@@ -523,7 +511,7 @@ const History: React.FC = () => {
                                     {isSelectionMode && (
                                         <button
                                             onClick={() => toggleSelection(item.id)}
-                                            className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${selectedItems.has(item.id)
+                                            className={`mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center ${selectedItems.has(item.id)
                                                 ? 'bg-green-500 border-green-500'
                                                 : 'border-gray-300 hover:border-green-400'
                                                 }`}
@@ -579,7 +567,7 @@ const History: React.FC = () => {
                                         {/* 展开/收起按钮 */}
                                         <button
                                             onClick={() => toggleExpand(item.id)}
-                                            className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors duration-300"
+                                            className="flex items-center space-x-2 text-green-600"
                                         >
                                             <span className="text-sm font-medium">
                                                 {item.expanded ? '收起处置方案' : '查看处置方案'}
@@ -604,14 +592,14 @@ const History: React.FC = () => {
                                                 <button
                                                     key={path.id}
                                                     onClick={() => handlePathClick(path, item)}
-                                                    className="w-full flex items-center space-x-3 p-3 bg-white rounded-xl hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-green-200 group"
+                                                    className="w-full flex items-center space-x-3 p-3 bg-white rounded-xl border border-gray-100 group"
                                                 >
-                                                    <div className={`w-10 h-10 bg-gradient-to-r ${path.gradient} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300`}>
+                                                    <div className={`w-10 h-10 bg-gradient-to-r ${path.gradient} rounded-xl flex items-center justify-center shadow-lg`}>
                                                         <Icon className="w-5 h-5 text-white" />
                                                     </div>
                                                     <div className="flex-1 text-left">
                                                         <div className="flex items-center justify-between">
-                                                            <h5 className="font-semibold text-gray-800 group-hover:text-gray-900">
+                                                            <h5 className="font-semibold text-gray-800">
                                                                 {path.title}
                                                             </h5>
                                                             <span className="text-sm font-bold text-green-600">
