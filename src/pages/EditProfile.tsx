@@ -122,7 +122,7 @@ const EditProfile: React.FC = () => {
                                 <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full flex items-center justify-center shadow-md">
                                     <User className="w-8 h-8 text-white" />
                                 </div>
-                                <label className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:shadow-lg transition-all duration-200 border border-gray-200">
+                                <label className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer border border-gray-200">
                                     <Camera className="w-3.5 h-3.5 text-gray-600" />
                                     <input
                                         type="file"
@@ -228,7 +228,7 @@ const EditProfile: React.FC = () => {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-3 rounded-lg font-medium text-base shadow-lg hover:shadow-xl hover:from-emerald-600 hover:to-green-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg active:scale-[0.98]"
+                        className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-3 rounded-lg font-medium text-base shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isLoading ? (
                             <div className="flex items-center justify-center space-x-2">

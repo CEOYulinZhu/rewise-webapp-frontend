@@ -177,7 +177,7 @@ const Login: React.FC = () => {
             case 'success':
                 return `${baseClasses} border-green-300 focus:border-green-500 focus:ring-4 focus:ring-green-100`;
             default:
-                return `${baseClasses} border-gray-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 hover:border-gray-300`;
+                return `${baseClasses} border-gray-200 focus:border-green-500 focus:ring-4 focus:ring-green-100`;
         }
     };
 
@@ -187,7 +187,7 @@ const Login: React.FC = () => {
             <div className="flex items-center justify-between p-4 pt-8">
                 <button
                     onClick={() => navigate(-1)}
-                    className="p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                    className="p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-lg"
                 >
                     <ArrowLeft className="w-5 h-5 text-green-600" />
                 </button>
@@ -196,18 +196,18 @@ const Login: React.FC = () => {
                     <div className="flex bg-gray-100 rounded-full p-1.5 w-64">
                         <button
                             onClick={() => setIsLogin(true)}
-                            className={`flex-1 py-2.5 px-6 rounded-full text-base font-medium transition-all duration-300 ${isLogin
+                            className={`flex-1 py-2.5 px-6 rounded-full text-base font-medium ${isLogin
                                 ? 'bg-white text-green-600 shadow-sm'
-                                : 'text-gray-600 hover:text-gray-800'
+                                : 'text-gray-600'
                                 }`}
                         >
                             登录
                         </button>
                         <button
                             onClick={() => setIsLogin(false)}
-                            className={`flex-1 py-2.5 px-6 rounded-full text-base font-medium transition-all duration-300 ${!isLogin
+                            className={`flex-1 py-2.5 px-6 rounded-full text-base font-medium ${!isLogin
                                 ? 'bg-white text-green-600 shadow-sm'
-                                : 'text-gray-600 hover:text-gray-800'
+                                : 'text-gray-600'
                                 }`}
                         >
                             注册
@@ -330,7 +330,7 @@ const Login: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors z-10"
+                                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10"
                                 >
                                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                 </button>
@@ -364,7 +364,7 @@ const Login: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors z-10"
+                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10"
                                     >
                                         {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                     </button>
@@ -389,11 +389,11 @@ const Login: React.FC = () => {
                                             onChange={(e) => handleInputChange('agreeTerms', e.target.checked)}
                                             className="sr-only"
                                         />
-                                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 ${formData.agreeTerms
+                                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${formData.agreeTerms
                                             ? 'bg-green-500 border-green-500'
                                             : errors.agreeTerms
                                                 ? 'border-red-300'
-                                                : 'border-gray-300 group-hover:border-green-400'
+                                                : 'border-gray-300'
                                             }`}>
                                             {formData.agreeTerms && (
                                                 <CheckCircle2 className="w-3 h-3 text-white" />
@@ -405,7 +405,7 @@ const Login: React.FC = () => {
                                         <button
                                             type="button"
                                             onClick={() => navigate('/user-agreement')}
-                                            className="text-green-600 hover:text-green-700 mx-1 underline font-medium"
+                                            className="text-green-600 mx-1 underline font-medium"
                                         >
                                             用户协议
                                         </button>
@@ -413,7 +413,7 @@ const Login: React.FC = () => {
                                         <button
                                             type="button"
                                             onClick={() => navigate('/privacy-policy')}
-                                            className="text-green-600 hover:text-green-700 mx-1 underline font-medium"
+                                            className="text-green-600 mx-1 underline font-medium"
                                         >
                                             隐私政策
                                         </button>
@@ -432,7 +432,7 @@ const Login: React.FC = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-4 rounded-xl font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98]"
+                            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-semibold text-base shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isLoading ? (
                                 <div className="flex items-center justify-center space-x-2">
@@ -449,7 +449,7 @@ const Login: React.FC = () => {
                             <div className="text-center">
                                 <button
                                     type="button"
-                                    className="text-gray-500 hover:text-green-600 text-sm font-medium transition-colors duration-300"
+                                    className="text-gray-500 text-sm font-medium"
                                 >
                                     忘记密码？
                                 </button>
@@ -464,7 +464,7 @@ const Login: React.FC = () => {
                         </span>
                         <button
                             onClick={toggleMode}
-                            className="text-green-600 hover:text-green-700 font-medium text-sm ml-2 transition-colors duration-300"
+                            className="text-green-600 font-medium text-sm ml-2"
                         >
                             {isLogin ? '立即注册' : '立即登录'}
                         </button>

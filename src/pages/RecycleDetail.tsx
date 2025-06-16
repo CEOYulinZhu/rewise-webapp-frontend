@@ -215,7 +215,7 @@ const RecycleDetail: React.FC = () => {
                     {recyclePoints.map((point) => (
                         <div
                             key={point.id}
-                            className="bg-gradient-to-r from-white to-green-50 rounded-2xl p-4 border border-green-100 hover:shadow-lg transition-all duration-300"
+                            className="bg-gradient-to-r from-white to-green-50 rounded-2xl p-4 border border-green-100"
                         >
                             <div className="flex space-x-4">
                                 <img
@@ -260,14 +260,14 @@ const RecycleDetail: React.FC = () => {
                                     <div className="flex space-x-2">
                                         <button
                                             onClick={() => handleCall(point.phone)}
-                                            className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs py-2 px-3 rounded-lg flex items-center justify-center space-x-1 transition-colors"
+                                            className="flex-1 bg-green-500 text-white text-xs py-2 px-3 rounded-lg flex items-center justify-center space-x-1"
                                         >
                                             <Phone className="w-3 h-3" />
                                             <span>电话咨询</span>
                                         </button>
                                         <button
                                             onClick={() => handleNavigation(point.address)}
-                                            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white text-xs py-2 px-3 rounded-lg flex items-center justify-center space-x-1 transition-colors"
+                                            className="flex-1 bg-blue-500 text-white text-xs py-2 px-3 rounded-lg flex items-center justify-center space-x-1"
                                         >
                                             <Navigation className="w-3 h-3" />
                                             <span>导航前往</span>
@@ -294,13 +294,13 @@ const RecycleDetail: React.FC = () => {
                     {onlinePlatforms.map((platform) => (
                         <div
                             key={platform.id}
-                            className={`bg-gradient-to-r ${platform.bgColor} rounded-2xl p-4 border border-white/30 hover:shadow-md hover:scale-[1.02] transition-all duration-300 cursor-pointer`}
+                            className={`bg-gradient-to-r ${platform.bgColor} rounded-2xl p-4 border border-white/30 cursor-pointer`}
                             onClick={() => window.open(platform.website, '_blank')}
                         >
                             <div className="flex items-center space-x-4">
                                 {/* 平台图标 */}
                                 <div className="flex-shrink-0">
-                                    <div className={`w-14 h-14 bg-gradient-to-r ${platform.color} rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-shadow duration-300`}>
+                                    <div className={`w-14 h-14 bg-gradient-to-r ${platform.color} rounded-2xl shadow-lg flex items-center justify-center`}>
                                         <img
                                             src={platform.logo}
                                             alt={platform.name}
@@ -372,28 +372,28 @@ const RecycleDetail: React.FC = () => {
                     <p className="text-xs text-gray-500">发现旧物新价值</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                    <div className="text-center p-3 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl hover:shadow-md transition-all duration-300">
+                    <div className="text-center p-3 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Leaf className="w-5 h-5 text-white" />
                         </div>
                         <div className="font-semibold text-green-700 text-sm mb-1">环保减废</div>
                         <div className="text-xs text-green-600">为地球贡献力量</div>
                     </div>
-                    <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl hover:shadow-md transition-all duration-300">
+                    <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Heart className="w-5 h-5 text-white" />
                         </div>
                         <div className="font-semibold text-blue-700 text-sm mb-1">传递爱心</div>
                         <div className="text-xs text-blue-600">帮助有需要的人</div>
                     </div>
-                    <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl hover:shadow-md transition-all duration-300">
+                    <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <DollarSign className="w-5 h-5 text-white" />
                         </div>
                         <div className="font-semibold text-purple-700 text-sm mb-1">节省开支</div>
                         <div className="text-xs text-purple-600">变废为宝</div>
                     </div>
-                    <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl hover:shadow-md transition-all duration-300">
+                    <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Zap className="w-5 h-5 text-white" />
                         </div>
@@ -409,7 +409,7 @@ const RecycleDetail: React.FC = () => {
                 <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl border border-red-100 shadow-lg">
                     <button
                         onClick={() => setShowSafety(!showSafety)}
-                        className="w-full p-4 flex items-center justify-between hover:bg-red-100/30 transition-colors rounded-t-2xl"
+                        className="w-full p-4 flex items-center justify-between rounded-t-2xl"
                     >
                         <div className="flex items-center">
                             <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center mr-3">
@@ -458,7 +458,7 @@ const RecycleDetail: React.FC = () => {
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-green-100 shadow-lg">
                     <button
                         onClick={() => setShowDetailedTips(!showDetailedTips)}
-                        className="w-full p-4 flex items-center justify-between hover:bg-green-50/50 transition-colors rounded-t-2xl"
+                        className="w-full p-4 flex items-center justify-between rounded-t-2xl"
                     >
                         <div className="flex items-center">
                             <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mr-3">

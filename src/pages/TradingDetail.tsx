@@ -214,7 +214,7 @@ const TradingDetail: React.FC = () => {
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-blue-100">
                 <button
                     onClick={() => setShowPriceChart(!showPriceChart)}
-                    className="w-full p-6 flex items-center justify-between hover:bg-blue-50/50 transition-colors rounded-t-3xl"
+                    className="w-full p-6 flex items-center justify-between rounded-t-3xl"
                 >
                     <div className="flex items-center">
                         <DollarSign className="w-5 h-5 text-blue-500 mr-2" />
@@ -259,7 +259,7 @@ const TradingDetail: React.FC = () => {
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-blue-100">
                 <button
                     onClick={() => setShowSalesChart(!showSalesChart)}
-                    className="w-full p-6 flex items-center justify-between hover:bg-blue-50/50 transition-colors rounded-t-3xl"
+                    className="w-full p-6 flex items-center justify-between rounded-t-3xl"
                 >
                     <div className="flex items-center">
                         <TrendingUp className="w-5 h-5 text-blue-500 mr-2" />
@@ -302,7 +302,7 @@ const TradingDetail: React.FC = () => {
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-blue-100">
                 <button
                     onClick={() => setShowCompetitionChart(!showCompetitionChart)}
-                    className="w-full p-6 flex items-center justify-between hover:bg-blue-50/50 transition-colors rounded-t-3xl"
+                    className="w-full p-6 flex items-center justify-between rounded-t-3xl"
                 >
                     <div className="flex items-center">
                         <Users className="w-5 h-5 text-blue-500 mr-2" />
@@ -382,18 +382,18 @@ const TradingDetail: React.FC = () => {
                     {platforms.map((platform) => (
                         <div
                             key={platform.id}
-                            className={`group bg-white rounded-2xl p-5 border-2 ${platform.borderColor} hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden`}
+                            className={`group bg-white rounded-2xl p-5 border-2 ${platform.borderColor} cursor-pointer relative overflow-hidden`}
                             onClick={() => handlePlatformClick(platform.url)}
                         >
                             {/* 背景装饰 */}
-                            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${platform.bgColor} rounded-full transform translate-x-16 -translate-y-16 opacity-30 group-hover:opacity-50 transition-opacity duration-300`}></div>
+                            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${platform.bgColor} rounded-full transform translate-x-16 -translate-y-16 opacity-30`}></div>
 
                             <div className="relative z-10">
                                 <div className="flex items-start justify-between mb-4">
                                     {/* 左侧：图标和基本信息 */}
                                     <div className="flex items-center space-x-4">
                                         {/* 平台图标容器 */}
-                                        <div className={`w-16 h-16 bg-gradient-to-br ${platform.color} rounded-2xl shadow-lg flex items-center justify-center group-hover:shadow-xl group-hover:scale-110 transition-all duration-300`}>
+                                        <div className={`w-16 h-16 bg-gradient-to-br ${platform.color} rounded-2xl shadow-lg flex items-center justify-center`}>
                                             <img
                                                 src={platform.logoUrl}
                                                 alt={`${platform.name} logo`}
@@ -428,8 +428,8 @@ const TradingDetail: React.FC = () => {
 
                                     {/* 右侧：跳转指示器 */}
                                     <div className="flex-shrink-0">
-                                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-blue-100 group-hover:scale-110 transition-all duration-300">
-                                            <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                                            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                             </svg>
                                         </div>
@@ -438,21 +438,21 @@ const TradingDetail: React.FC = () => {
 
                                 {/* 核心信息展示区域 */}
                                 <div className="grid grid-cols-3 gap-4">
-                                    <div className="text-center p-3 bg-gray-50 rounded-xl group-hover:bg-gray-100 transition-colors duration-300">
+                                    <div className="text-center p-3 bg-gray-50 rounded-xl">
                                         <div className="flex items-center justify-center mb-2">
                                             <DollarSign className="w-5 h-5 text-green-600" />
                                         </div>
                                         <div className="text-base font-bold text-gray-800 leading-tight whitespace-nowrap">{platform.avgPrice}</div>
                                         <div className="text-xs text-gray-500">平均价格</div>
                                     </div>
-                                    <div className="text-center p-3 bg-gray-50 rounded-xl group-hover:bg-gray-100 transition-colors duration-300">
+                                    <div className="text-center p-3 bg-gray-50 rounded-xl">
                                         <div className="flex items-center justify-center mb-2">
                                             <TrendingUp className="w-5 h-5 text-blue-600" />
                                         </div>
                                         <div className="text-base font-bold text-gray-800 leading-tight whitespace-nowrap">{platform.timeToSell}</div>
                                         <div className="text-xs text-gray-500">成交时间</div>
                                     </div>
-                                    <div className="text-center p-3 bg-gray-50 rounded-xl group-hover:bg-gray-100 transition-colors duration-300">
+                                    <div className="text-center p-3 bg-gray-50 rounded-xl">
                                         <div className="flex items-center justify-center mb-2">
                                             <Users className="w-5 h-5 text-purple-600" />
                                         </div>
@@ -463,9 +463,9 @@ const TradingDetail: React.FC = () => {
 
                                 {/* 操作提示 */}
                                 <div className="mt-4 pt-3 border-t border-gray-100">
-                                    <div className="flex items-center justify-center text-sm text-gray-500 group-hover:text-blue-600 transition-colors duration-300">
+                                    <div className="flex items-center justify-center text-sm text-gray-500">
                                         <span>点击访问平台</span>
-                                        <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                         </svg>
                                     </div>
@@ -491,7 +491,7 @@ const TradingDetail: React.FC = () => {
                     {copyTemplates.map((template) => {
                         const IconComponent = template.icon;
                         return (
-                            <div key={template.id} className="bg-gradient-to-r from-white to-blue-50 rounded-2xl p-4 border border-blue-100 hover:shadow-md transition-all duration-300">
+                            <div key={template.id} className="bg-gradient-to-r from-white to-blue-50 rounded-2xl p-4 border border-blue-100">
                                 <div className="flex items-start space-x-4">
                                     <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center flex-shrink-0">
                                         <IconComponent className="w-5 h-5 text-white" />
@@ -501,9 +501,9 @@ const TradingDetail: React.FC = () => {
                                             <h4 className="font-semibold text-gray-800">{template.title}</h4>
                                             <button
                                                 onClick={() => handleCopyText(template.content, template.id)}
-                                                className={`flex items-center space-x-1 text-sm px-3 py-1 rounded-lg transition-all duration-300 ${copiedItems[template.id]
+                                                className={`flex items-center space-x-1 text-sm px-3 py-1 rounded-lg ${copiedItems[template.id]
                                                     ? 'text-green-600 bg-green-50 border border-green-200'
-                                                    : 'text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100'
+                                                    : 'text-blue-600 bg-blue-50'
                                                     }`}
                                             >
                                                 {copiedItems[template.id] ? (

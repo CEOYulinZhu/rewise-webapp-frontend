@@ -199,7 +199,7 @@ const Index: React.FC = () => {
                 </div>
                 <button
                     onClick={() => navigate('/profile')}
-                    className="p-2.5 rounded-2xl bg-white/80 backdrop-blur-xl shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-300 border border-white/50"
+                    className="p-2.5 rounded-2xl bg-white/80 backdrop-blur-xl shadow-lg shadow-gray-200/50 border border-white/50"
                 >
                     <User className="w-4 h-4 text-gray-600" />
                 </button>
@@ -245,9 +245,9 @@ const Index: React.FC = () => {
                 <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-2xl shadow-gray-200/20 border border-white/50">
                     {!selectedImage ? (
                         <div
-                            className={`border-2 border-dashed rounded-3xl p-6 text-center transition-all duration-300 ${isDragOver
+                            className={`border-2 border-dashed rounded-3xl p-6 text-center ${isDragOver
                                 ? 'border-emerald-400 bg-gradient-to-b from-emerald-50 to-green-50 scale-105'
-                                : 'border-gray-300 bg-gradient-to-b from-gray-50/50 to-transparent hover:border-emerald-300 hover:bg-gradient-to-b hover:from-emerald-50/50 hover:to-green-50/50'
+                                : 'border-gray-300 bg-gradient-to-b from-gray-50/50 to-transparent'
                                 }`}
                             onDragOver={handleDragOver}
                             onDragLeave={handleDragLeave}
@@ -273,14 +273,14 @@ const Index: React.FC = () => {
                                 <div className="flex space-x-3">
                                     <button
                                         onClick={() => cameraInputRef.current?.click()}
-                                        className="flex items-center space-x-2 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white px-6 py-3.5 rounded-2xl shadow-xl shadow-emerald-200/50 hover:shadow-2xl hover:shadow-emerald-300/50 transition-all duration-300 hover:scale-105 active:scale-95 font-semibold text-sm"
+                                        className="flex items-center space-x-2 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white px-6 py-3.5 rounded-2xl shadow-xl shadow-emerald-200/50 font-semibold text-sm"
                                     >
                                         <Camera className="w-4 h-4" />
                                         <span>拍照</span>
                                     </button>
                                     <button
                                         onClick={() => fileInputRef.current?.click()}
-                                        className="flex items-center space-x-2 bg-white border-2 border-emerald-200 text-emerald-600 px-6 py-3.5 rounded-2xl shadow-lg hover:shadow-xl hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 hover:scale-105 active:scale-95 font-semibold text-sm"
+                                        className="flex items-center space-x-2 bg-white border-2 border-emerald-200 text-emerald-600 px-6 py-3.5 rounded-2xl shadow-lg font-semibold text-sm"
                                     >
                                         <Upload className="w-4 h-4" />
                                         <span>相册</span>
@@ -311,10 +311,10 @@ const Index: React.FC = () => {
                                     alt="上传的图片"
                                     className="w-full h-48 object-cover rounded-3xl shadow-2xl shadow-gray-200/50"
                                 />
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 rounded-3xl transition-all duration-300"></div>
+                                <div className="absolute inset-0 bg-black/0 rounded-3xl"></div>
                                 <button
                                     onClick={handleRetake}
-                                    className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white p-2 rounded-2xl hover:bg-black/80 transition-all duration-300 shadow-lg"
+                                    className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white p-2 rounded-2xl shadow-lg"
                                 >
                                     <X className="w-4 h-4" />
                                 </button>
@@ -360,7 +360,7 @@ const Index: React.FC = () => {
                             {description.length > 0 && (
                                 <button
                                     onClick={() => setDescription('')}
-                                    className="absolute top-3 right-3 p-1.5 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
+                                    className="absolute top-3 right-3 p-1.5 rounded-full bg-gray-200"
                                 >
                                     <X className="w-3 h-3 text-gray-600" />
                                 </button>
@@ -374,14 +374,14 @@ const Index: React.FC = () => {
                     <button
                         onClick={handleSubmit}
                         disabled={!canSubmit() || isLoading}
-                        className={`w-full py-4 rounded-3xl font-bold text-lg transition-all duration-300 flex items-center justify-center space-x-3 relative overflow-hidden ${canSubmit() && !isLoading
-                            ? `bg-gradient-to-r ${analysisInfo.gradient} text-white shadow-2xl ${analysisInfo.shadowColor} hover:shadow-3xl hover:scale-[1.02] active:scale-[0.98] border border-white/20`
+                        className={`w-full py-4 rounded-3xl font-bold text-lg flex items-center justify-center space-x-3 relative overflow-hidden ${canSubmit() && !isLoading
+                            ? `bg-gradient-to-r ${analysisInfo.gradient} text-white shadow-2xl ${analysisInfo.shadowColor} border border-white/20`
                             : 'bg-gray-200 text-gray-500 cursor-not-allowed shadow-lg'
                             }`}
                     >
                         {/* 按钮背景动画 */}
                         {canSubmit() && !isLoading && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%]"></div>
                         )}
 
                         {isLoading ? (
@@ -406,7 +406,7 @@ const Index: React.FC = () => {
             {!hasUserInput() && (
                 <button
                     onClick={() => setShowTips(!showTips)}
-                    className="fixed bottom-6 right-6 w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full shadow-xl hover:shadow-2xl transform hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center border-1 border-white/20 backdrop-blur-sm z-50"
+                    className="fixed bottom-6 right-6 w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full shadow-xl flex items-center justify-center border-1 border-white/20 backdrop-blur-sm z-50"
                     title="查看功能介绍"
                 >
                     <HelpCircle className="w-4 h-4" />
@@ -434,7 +434,7 @@ const Index: React.FC = () => {
                             </div>
                             <button
                                 onClick={() => setShowTips(false)}
-                                className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center"
+                                className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center"
                             >
                                 <X className="w-3 h-3 text-gray-600" />
                             </button>

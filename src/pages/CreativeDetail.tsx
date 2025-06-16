@@ -247,7 +247,7 @@ const CreativeDetail: React.FC = () => {
                 {tutorials.map((tutorial) => (
                     <div
                         key={tutorial.id}
-                        className="bg-gradient-to-r from-white to-purple-50 rounded-2xl p-4 border border-purple-100 hover:shadow-lg transition-all duration-300"
+                        className="bg-gradient-to-r from-white to-purple-50 rounded-2xl p-4 border border-purple-100"
                     >
                         <div className="flex space-x-4">
                             <img
@@ -262,7 +262,7 @@ const CreativeDetail: React.FC = () => {
                                     </h4>
                                     <button
                                         onClick={() => window.open(tutorial.url, '_blank')}
-                                        className="flex-shrink-0 p-1 text-purple-500 hover:bg-purple-100 rounded-lg transition-colors"
+                                        className="flex-shrink-0 p-1 text-purple-500 rounded-lg"
                                     >
                                         <ExternalLink className="w-4 h-4" />
                                     </button>
@@ -300,28 +300,28 @@ const CreativeDetail: React.FC = () => {
                     <p className="text-xs text-gray-500">发现旧物新价值</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                    <div className="text-center p-3 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl hover:shadow-md transition-all duration-300">
+                    <div className="text-center p-3 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Leaf className="w-5 h-5 text-white" />
                         </div>
                         <div className="font-semibold text-green-700 text-sm mb-1">环保减废</div>
                         <div className="text-xs text-green-600">为地球贡献力量</div>
                     </div>
-                    <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl hover:shadow-md transition-all duration-300">
+                    <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Palette className="w-5 h-5 text-white" />
                         </div>
                         <div className="font-semibold text-blue-700 text-sm mb-1">创意表达</div>
                         <div className="text-xs text-blue-600">展现个人风格</div>
                     </div>
-                    <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl hover:shadow-md transition-all duration-300">
+                    <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <DollarSign className="w-5 h-5 text-white" />
                         </div>
                         <div className="font-semibold text-purple-700 text-sm mb-1">节省开支</div>
                         <div className="text-xs text-purple-600">性价比超高</div>
                     </div>
-                    <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl hover:shadow-md transition-all duration-300">
+                    <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Sparkles className="w-5 h-5 text-white" />
                         </div>
@@ -337,7 +337,7 @@ const CreativeDetail: React.FC = () => {
                 <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl border border-red-100 shadow-lg">
                     <button
                         onClick={() => setShowSafety(!showSafety)}
-                        className="w-full p-4 flex items-center justify-between hover:bg-red-100/30 transition-colors rounded-t-2xl"
+                        className="w-full p-4 flex items-center justify-between rounded-t-2xl"
                     >
                         <div className="flex items-center">
                             <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center mr-3">
@@ -382,7 +382,7 @@ const CreativeDetail: React.FC = () => {
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-purple-100 shadow-lg">
                     <button
                         onClick={() => setShowDetailedTips(!showDetailedTips)}
-                        className="w-full p-4 flex items-center justify-between hover:bg-purple-50/50 transition-colors rounded-t-2xl"
+                        className="w-full p-4 flex items-center justify-between rounded-t-2xl"
                     >
                         <div className="flex items-center">
                             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-3">
@@ -447,7 +447,7 @@ const CreativeDetail: React.FC = () => {
                 <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl border border-yellow-200">
                     <button
                         onClick={() => setShowExperience(!showExperience)}
-                        className="w-full p-4 flex items-center justify-between hover:bg-yellow-100/30 transition-colors rounded-t-2xl"
+                        className="w-full p-4 flex items-center justify-between rounded-t-2xl"
                     >
                         <div className="flex items-center">
                             <div className="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center mr-3">

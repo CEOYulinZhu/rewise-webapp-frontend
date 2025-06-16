@@ -139,17 +139,14 @@ const Overview: React.FC = () => {
                 actionButtons={[
                     {
                         icon: Upload,
-                        onClick: () => navigate('/'),
-                        className: 'active:scale-95 transition-all duration-200'
+                        onClick: () => navigate('/')
                     },
                     {
                         icon: RefreshCw,
-                        onClick: () => window.location.reload(),
-                        className: 'active:scale-95 transition-all duration-200'
+                        onClick: () => window.location.reload()
                     }
                 ]}
                 className=""
-                backButtonClassName="active:scale-95 transition-all duration-200"
             />
 
             {/* 物品信息预览 */}
