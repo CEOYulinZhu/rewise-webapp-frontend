@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Heart, Share2, MapPin, Phone, Globe, Clock, Navigation, BarChart3, Map, Smartphone, Lightbulb, Star, Leaf, Shield, DollarSign, Zap, Target, ChevronDown, ChevronUp } from 'lucide-react';
+import { Heart, Share2, MapPin, Phone, Globe, Clock, Navigation, BarChart3, Map, Smartphone, Lightbulb, Star, Leaf, Shield, DollarSign, Zap, Target, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import DetailPageLayout from '../components/DetailPageLayout';
 import type { TabConfig } from '../components/DetailPageLayout';
 import { recycleTheme } from '../config/detailPageThemes';
+import { useGlobalState } from '../hooks/useGlobalState';
 
 interface LocationState {
     image: string;
@@ -27,96 +28,29 @@ const RecycleDetail: React.FC = () => {
     const [showDetailedTips, setShowDetailedTips] = useState(false);
     const [showSafety, setShowSafety] = useState(false);
 
-    // 模拟回收点数据
-    const recyclePoints = [
-        {
-            id: 1,
-            name: '绿色环保回收站',
-            type: '综合回收点',
-            address: '北京市朝阳区望京SOHO T3 1层',
-            distance: '1.2km',
-            phone: '010-12345678',
-            hours: '周一至周日 8:00-18:00',
-            acceptTypes: ['电子产品', '家具', '衣物', '书籍'],
-            rating: 4.8,
-            image: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=200&fit=crop'
-        },
-        {
-            id: 2,
-            name: '爱心公益收集点',
-            type: '慈善组织',
-            address: '北京市海淀区中关村大街27号',
-            distance: '2.1km',
-            phone: '010-87654321',
-            hours: '周一至周五 9:00-17:00',
-            acceptTypes: ['衣物', '玩具', '书籍', '生活用品'],
-            rating: 4.9,
-            image: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=300&h=200&fit=crop'
-        },
-        {
-            id: 3,
-            name: '智能回收柜',
-            type: '自助回收',
-            address: '北京市西城区复兴门内大街甲8号',
-            distance: '3.5km',
-            phone: '400-888-9999',
-            hours: '24小时开放',
-            acceptTypes: ['电子产品', '金属', '塑料'],
-            rating: 4.6,
-            image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=200&fit=crop'
-        }
-    ];
+    // 获取全局状态中的分析结果
+    const { analysisResult } = useGlobalState();
 
-    // 模拟在线平台数据
-    const onlinePlatforms = [
-        {
-            id: 1,
-            name: '闲鱼',
-            description: '阿里巴巴旗下闲置交易社区',
-            website: 'https://2.taobao.com',
-            features: ['免费发布', '在线估价', '同城交易'],
-            rating: 4.6,
-            users: '6亿+',
-            category: '综合平台',
-            logo: 'https://gw.alicdn.com/imgextra/i1/O1CN01Z5paLz1O0zuCC7osS_!!6000000001644-55-tps-83-83.svg',
-            color: 'from-orange-400 to-red-500',
-            bgColor: 'from-orange-50 to-red-50'
-        },
-        {
-            id: 2,
-            name: '爱回收',
-            description: '专业数码回收平台',
-            website: 'https://www.aihuishou.com',
-            features: ['专业估价', '上门回收', '当天到账'],
-            rating: 4.7,
-            users: '5000万+',
-            category: '数码回收',
-            logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzI2Q0Y0RSIvPgo8cGF0aCBkPSJNMjAgMzJMMTIgMjRIMTZWMTZIMjRWMjRIMjhMMjAgMzJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K',
-            color: 'from-green-400 to-emerald-500',
-            bgColor: 'from-green-50 to-emerald-50'
-        },
-        {
-            id: 3,
-            name: '转转',
-            description: '58同城旗下二手交易平台',
-            website: 'https://www.zhuanzhuan.com',
-            features: ['质量检测', '安全保障', '无忧售后'],
-            rating: 4.5,
-            users: '4亿+',
-            category: '二手交易',
-            logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iI0ZGNkEwMCIvPgo8Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSI4IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiLz4KPHA6IG0xNiAyMGE0IDQgMCAwIDEgOCAwIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=',
-            color: 'from-yellow-400 to-orange-500',
-            bgColor: 'from-yellow-50 to-orange-50'
+    // 获取回收方案数据
+    const recyclingSolution = analysisResult?.recycling_solution;
+    const processingData = recyclingSolution?.processing_summary;
+    const locationData = recyclingSolution?.location_recommendation;
+    const platformData = recyclingSolution?.platform_recommendation;
+    const disposalSolution = analysisResult?.disposal_solution;
+
+    // 获取推荐度分数 - 使用 disposal_solution 中的 recycling_donation 分数
+    const getRecommendationScore = () => {
+        if (disposalSolution?.recommendations?.recycling_donation?.recommendation_score) {
+            return disposalSolution.recommendations.recycling_donation.recommendation_score;
         }
-    ];
+        return 70; // 默认值
+    };
 
     const getTypeColor = (type: string) => {
-        switch (type) {
-            case '综合回收点': return 'bg-green-100 text-green-700';
-            case '慈善组织': return 'bg-blue-100 text-blue-700';
-            case '自助回收': return 'bg-purple-100 text-purple-700';
-            default: return 'bg-gray-100 text-gray-700';
-        }
+        if (type.includes('维修')) return 'bg-green-100 text-green-700';
+        if (type.includes('服务')) return 'bg-blue-100 text-blue-700';
+        if (type.includes('回收')) return 'bg-purple-100 text-purple-700';
+        return 'bg-gray-100 text-gray-700';
     };
 
     const handleCall = (phone: string) => {
@@ -124,7 +58,6 @@ const RecycleDetail: React.FC = () => {
     };
 
     const handleNavigation = (address: string) => {
-        // 模拟导航功能
         const encodedAddress = encodeURIComponent(address);
         window.open(`https://maps.baidu.com/search/${encodedAddress}`, '_blank');
     };
@@ -157,14 +90,14 @@ const RecycleDetail: React.FC = () => {
                         <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <MapPin className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-green-700">3</div>
+                        <div className="text-xl font-bold text-green-700">{locationData?.locations_count || 0}</div>
                         <div className="text-xs text-green-600">回收点</div>
                     </div>
                     <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Smartphone className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-blue-700">3</div>
+                        <div className="text-xl font-bold text-blue-700">{processingData?.platform_count || 0}</div>
                         <div className="text-xs text-blue-600">在线平台</div>
                     </div>
                     <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
@@ -183,22 +116,7 @@ const RecycleDetail: React.FC = () => {
                     </div>
                 </div>
 
-                {/* 推荐度指示器 */}
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-3 border border-green-200">
-                    <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                            <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                            <span className="font-semibold text-gray-800 text-sm">推荐度评分</span>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">70%</div>
-                            <div className="text-xs text-gray-600">综合评估</div>
-                        </div>
-                    </div>
-                    <div className="h-2 bg-green-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-1000 ease-out" style={{ width: '70%' }}></div>
-                    </div>
-                </div>
+
             </div>
         </div>
     );
@@ -211,156 +129,358 @@ const RecycleDetail: React.FC = () => {
                     <MapPin className="w-5 h-5 text-green-500 mr-2" />
                     附近回收点
                 </h3>
-                <div className="space-y-4">
-                    {recyclePoints.map((point) => (
-                        <div
-                            key={point.id}
-                            className="bg-gradient-to-r from-white to-green-50 rounded-2xl p-4 border border-green-100"
-                        >
-                            <div className="flex space-x-4">
-                                <img
-                                    src={point.image}
-                                    alt={point.name}
-                                    className="w-16 h-16 object-cover rounded-xl shadow-md"
-                                />
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-start justify-between mb-2">
-                                        <div>
-                                            <h4 className="font-semibold text-gray-800">{point.name}</h4>
-                                            <div className="flex items-center space-x-2 mt-1">
-                                                <span className={`text-xs px-2 py-1 rounded-full ${getTypeColor(point.type)}`}>
-                                                    {point.type}
-                                                </span>
-                                                <span className="text-xs text-gray-600">{point.distance}</span>
-                                                <div className="flex items-center text-xs text-yellow-600">
-                                                    <span>⭐ {point.rating}</span>
+
+                {locationData?.locations && locationData.locations.length > 0 ? (
+                    <div className="space-y-4">
+                        {locationData.locations.map((location: any) => (
+                            <div
+                                key={location.id}
+                                className="bg-gradient-to-r from-white to-green-50 rounded-2xl p-4 border border-green-100"
+                            >
+                                <div className="flex space-x-4">
+                                    {/* 使用第一张照片作为展示图片 */}
+                                    <img
+                                        src={location.photos?.[0]?.url || 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=200&fit=crop'}
+                                        alt={location.name}
+                                        className="w-16 h-16 object-cover rounded-xl shadow-md"
+                                        onError={(e) => {
+                                            const target = e.currentTarget as HTMLImageElement;
+                                            target.src = 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=200&fit=crop';
+                                        }}
+                                    />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-start justify-between mb-2">
+                                            <div>
+                                                <h4 className="font-semibold text-gray-800 text-sm">{location.name}</h4>
+                                                <div className="flex items-center space-x-2 mt-1">
+                                                    <span className={`text-xs px-2 py-1 rounded-full ${getTypeColor(location.type)}`}>
+                                                        {location.type.split(';')[0] || '回收点'}
+                                                    </span>
+                                                    <span className="text-xs text-gray-600">{location.distance_formatted}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="flex items-center text-xs text-gray-600 mb-2">
-                                        <MapPin className="w-3 h-3 mr-1" />
-                                        <span className="flex-1">{point.address}</span>
-                                    </div>
+                                        <div className="flex items-center text-xs text-gray-600 mb-2">
+                                            <MapPin className="w-3 h-3 mr-1" />
+                                            <span className="flex-1">{location.address}</span>
+                                        </div>
 
-                                    <div className="flex items-center text-xs text-gray-600 mb-3">
-                                        <Clock className="w-3 h-3 mr-1" />
-                                        <span>{point.hours}</span>
-                                    </div>
+                                        <div className="flex items-center text-xs text-gray-600 mb-3">
+                                            <Clock className="w-3 h-3 mr-1" />
+                                            <span>{location.opentime_week || location.opentime_today || '营业时间请致电咨询'}</span>
+                                        </div>
 
-                                    <div className="flex flex-wrap gap-1 mb-3">
-                                        {point.acceptTypes.map((type, idx) => (
-                                            <span key={idx} className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-lg">
-                                                {type}
-                                            </span>
-                                        ))}
-                                    </div>
-
-                                    <div className="flex space-x-2">
-                                        <button
-                                            onClick={() => handleCall(point.phone)}
-                                            className="flex-1 bg-green-500 text-white text-xs py-2 px-3 rounded-lg flex items-center justify-center space-x-1"
-                                        >
-                                            <Phone className="w-3 h-3" />
-                                            <span>电话咨询</span>
-                                        </button>
-                                        <button
-                                            onClick={() => handleNavigation(point.address)}
-                                            className="flex-1 bg-blue-500 text-white text-xs py-2 px-3 rounded-lg flex items-center justify-center space-x-1"
-                                        >
-                                            <Navigation className="w-3 h-3" />
-                                            <span>导航前往</span>
-                                        </button>
+                                        <div className="flex space-x-2">
+                                            <button
+                                                onClick={() => handleCall(location.tel)}
+                                                className="flex-1 bg-green-500 text-white text-xs py-2 px-3 rounded-lg flex items-center justify-center space-x-1"
+                                            >
+                                                <Phone className="w-3 h-3" />
+                                                <span>电话咨询</span>
+                                            </button>
+                                            <button
+                                                onClick={() => handleNavigation(location.address)}
+                                                className="flex-1 bg-blue-500 text-white text-xs py-2 px-3 rounded-lg flex items-center justify-center space-x-1"
+                                            >
+                                                <Navigation className="w-3 h-3" />
+                                                <span>导航前往</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-8 text-gray-500">
+                        <MapPin className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                        <p>暂无附近回收点信息</p>
+                    </div>
+                )}
             </div>
         </div>
     );
 
-    // 在线平台内容
-    const renderPlatforms = () => (
-        <div className="space-y-4">
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-green-100">
-                <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center">
-                    <Globe className="w-5 h-5 text-green-500 mr-2" />
-                    推荐回收平台
-                </h3>
-                <div className="space-y-3">
-                    {onlinePlatforms.map((platform) => (
-                        <div
-                            key={platform.id}
-                            className={`bg-gradient-to-r ${platform.bgColor} rounded-2xl p-4 border border-white/30 cursor-pointer`}
-                            onClick={() => window.open(platform.website, '_blank')}
-                        >
-                            <div className="flex items-center space-x-4">
-                                {/* 平台图标 */}
-                                <div className="flex-shrink-0">
-                                    <div className={`w-14 h-14 bg-gradient-to-r ${platform.color} rounded-2xl shadow-lg flex items-center justify-center`}>
-                                        <img
-                                            src={platform.logo}
-                                            alt={platform.name}
-                                            className="w-7 h-7"
-                                            onError={(e) => {
-                                                const target = e.currentTarget as HTMLImageElement;
-                                                target.style.display = 'none';
-                                                const nextSibling = target.nextElementSibling as HTMLElement;
-                                                if (nextSibling) {
-                                                    nextSibling.style.display = 'block';
-                                                }
-                                            }}
-                                        />
-                                        <span className="text-white font-bold text-xl hidden">{platform.name[0]}</span>
-                                    </div>
-                                </div>
+    // 在线平台内容 - 重新设计布局
+    const renderPlatforms = () => {
+        // 添加展开状态管理
+        const [expandedPlatforms, setExpandedPlatforms] = useState<{ [key: number]: boolean }>({});
 
-                                <div className="flex-1 min-w-0 overflow-hidden">
-                                    {/* 平台名称行 */}
-                                    <div className="flex items-center justify-between mb-2">
-                                        <div className="flex items-center space-x-2 min-w-0 flex-1">
-                                            <h4 className="font-bold text-gray-800 text-lg truncate flex-shrink-0">{platform.name}</h4>
-                                            <div className="flex items-center space-x-1 bg-white/80 px-2 py-1 rounded-lg flex-shrink-0">
-                                                <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                                                <span className="text-xs font-medium text-gray-700">{platform.rating}</span>
+        // 切换展开状态
+        const toggleExpanded = (index: number) => {
+            setExpandedPlatforms(prev => ({
+                ...prev,
+                [index]: !prev[index]
+            }));
+        };
+
+        // 获取平台差异化描述
+        const getPlatformHighlight = (name: string) => {
+            switch (name) {
+                case '闲鱼':
+                    return '3亿用户选择的二手生活圈';
+                case '转转':
+                    return '合并京东拍拍后的二手新生态';
+                case '爱回收':
+                    return '专业数码回收领军品牌';
+                default:
+                    return '专业回收服务平台';
+            }
+        };
+
+
+
+        return (
+            <div className="space-y-4">
+                <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-green-100">
+                    <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center">
+                        <Globe className="w-5 h-5 text-green-500 mr-2" />
+                        推荐回收平台
+                    </h3>
+
+                    {platformData?.platform_details && platformData.platform_details.length > 0 ? (
+                        <div className="space-y-3">
+                            {platformData.platform_details.map((platform: any, index: number) => {
+                                // 获取对应的AI推荐信息
+                                const aiRecommendation = platformData.ai_recommendations?.recommendations?.find(
+                                    (rec: any) => rec.platform_name === platform.platform_name
+                                );
+
+                                // 根据平台名称设置颜色主题 - 精简配色
+                                const getColorTheme = (name: string) => {
+                                    switch (name) {
+                                        case '爱回收':
+                                            return {
+                                                primary: 'text-green-700',
+                                                bg: 'bg-gray-50',
+                                                border: 'border-gray-200',
+                                                button: 'border-green-500 text-green-600 hover:bg-green-50 active:bg-green-100 active:animate-pulse',
+                                                accent: 'bg-green-500 text-white',
+                                                star: 'text-green-500',
+                                                brand: 'green'
+                                            };
+                                        case '闲鱼':
+                                            return {
+                                                primary: 'text-yellow-700',
+                                                bg: 'bg-gray-50',
+                                                border: 'border-gray-200',
+                                                button: 'border-yellow-500 text-yellow-600 hover:bg-yellow-50 active:bg-yellow-100 active:animate-pulse',
+                                                accent: 'bg-yellow-500 text-white',
+                                                star: 'text-yellow-500',
+                                                brand: 'yellow'
+                                            };
+                                        case '转转':
+                                            return {
+                                                primary: 'text-orange-700',
+                                                bg: 'bg-gray-50',
+                                                border: 'border-gray-200',
+                                                button: 'border-orange-500 text-orange-600 hover:bg-orange-50 active:bg-orange-100 active:animate-pulse',
+                                                accent: 'bg-orange-500 text-white',
+                                                star: 'text-orange-500',
+                                                brand: 'orange'
+                                            };
+                                        default:
+                                            return {
+                                                primary: 'text-blue-700',
+                                                bg: 'bg-gray-50',
+                                                border: 'border-gray-200',
+                                                button: 'border-blue-500 text-blue-600 hover:bg-blue-50 active:bg-blue-100 active:animate-pulse',
+                                                accent: 'bg-blue-500 text-white',
+                                                star: 'text-blue-500',
+                                                brand: 'blue'
+                                            };
+                                    }
+                                };
+
+                                const theme = getColorTheme(platform.platform_name);
+                                const isExpanded = expandedPlatforms[index];
+
+                                return (
+                                    <div
+                                        key={index}
+                                        className={`${theme.bg} ${theme.border} border rounded-lg transition-all duration-300 hover:shadow-sm hover:shadow-gray-200/50`}
+                                    >
+                                        {/* 精简的标题区域 */}
+                                        <div className="flex items-center justify-between p-3 pb-2">
+                                            <div className="flex items-center space-x-3 flex-1">
+                                                {/* 平台图标 - 缩小 */}
+                                                <div className="w-8 h-8 bg-white rounded-lg shadow-sm flex items-center justify-center flex-shrink-0">
+                                                    <img
+                                                        src={platform.platform_icon}
+                                                        alt={platform.platform_name}
+                                                        className="w-5 h-5"
+                                                        onError={(e) => {
+                                                            const target = e.currentTarget as HTMLImageElement;
+                                                            target.style.display = 'none';
+                                                            const nextSibling = target.nextElementSibling as HTMLElement;
+                                                            if (nextSibling) {
+                                                                nextSibling.style.display = 'block';
+                                                            }
+                                                        }}
+                                                    />
+                                                    <span className="text-gray-600 font-bold text-xs hidden">{platform.platform_name[0]}</span>
+                                                </div>
+
+                                                {/* 平台名称和信息 */}
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center space-x-2 mb-1">
+                                                        {/* 主标题 - 加大字号 */}
+                                                        <h4 className={`font-semibold text-base ${theme.primary}`}>{platform.platform_name}</h4>
+                                                        {/* 评分 - 星星与分数合并 */}
+                                                        {aiRecommendation?.suitability_score && (
+                                                            <div className="flex items-center space-x-0.5">
+                                                                <Star className={`w-3 h-3 ${theme.star} fill-current`} />
+                                                                <span className={`text-xs font-medium ${theme.star}`}>
+                                                                    {aiRecommendation.suitability_score}
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    {/* 副标题 - 缩小字号，浅灰色 */}
+                                                    <p className="text-xs text-gray-500 leading-tight">
+                                                        {getPlatformHighlight(platform.platform_name)}
+                                                    </p>
+                                                </div>
                                             </div>
+
+                                            {/* 幽灵按钮 - 缩小尺寸 */}
+                                            <button
+                                                onClick={() => {
+                                                    const urls: { [key: string]: string } = {
+                                                        '爱回收': 'https://www.aihuishou.com',
+                                                        '闲鱼': 'https://2.taobao.com',
+                                                        '转转': 'https://www.zhuanzhuan.com'
+                                                    };
+                                                    window.open(urls[platform.platform_name] || '#', '_blank');
+                                                }}
+                                                className={`${theme.button} border px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 flex items-center space-x-1`}
+                                                title="一键跳转官网"
+                                                style={{ width: '90px', height: '28px' }}
+                                            >
+                                                <span>访问平台</span>
+                                                <ExternalLink className="w-2.5 h-2.5" />
+                                            </button>
                                         </div>
-                                        <div className="text-xs text-gray-500 bg-white/60 px-2 py-1 rounded-lg flex-shrink-0 ml-2">
-                                            {platform.users}
+
+                                        {/* 默认显示的核心优势 - 压缩间距 */}
+                                        <div className="px-3 pb-2">
+                                            {aiRecommendation && aiRecommendation.pros && aiRecommendation.pros.length > 0 && (
+                                                <div className="flex items-center space-x-2">
+                                                    {/* 彩色小标签 - 品牌色 */}
+                                                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${theme.accent}`} style={{ fontSize: '10px' }}>
+                                                        核心优势
+                                                    </span>
+                                                    <div className="flex items-center space-x-1 text-xs text-gray-600">
+                                                        <span>{aiRecommendation.pros[0]}</span>
+                                                    </div>
+                                                    {aiRecommendation.pros[1] && (
+                                                        <>
+                                                            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                                                            <div className="flex items-center space-x-1 text-xs text-gray-600">
+                                                                <span>{aiRecommendation.pros[1]}</span>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
-                                    </div>
 
-                                    {/* 平台描述 */}
-                                    <p className="text-sm text-gray-600 mb-3 leading-relaxed line-clamp-2">{platform.description}</p>
+                                        {/* 展开/收起按钮 - 压缩间距 */}
+                                        <div className="px-3 pb-2">
+                                            <button
+                                                onClick={() => toggleExpanded(index)}
+                                                className="w-full flex items-center justify-center space-x-2 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200 py-1.5 rounded-lg hover:bg-white/50"
+                                            >
+                                                <span>{isExpanded ? '收起详情' : '展开详情'}</span>
+                                                {isExpanded ? (
+                                                    <ChevronUp className="w-3 h-3" />
+                                                ) : (
+                                                    <ChevronDown className="w-3 h-3" />
+                                                )}
+                                            </button>
+                                        </div>
 
-                                    {/* 特色功能标签 */}
-                                    <div className="flex flex-wrap gap-2">
-                                        {platform.features.map((feature, idx) => (
-                                            <span key={idx} className="text-xs bg-white/70 backdrop-blur-sm px-3 py-1 rounded-full text-gray-700 font-medium border border-white/50 flex-shrink-0">
-                                                {feature}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
+                                        {/* 可折叠的详细内容 - 压缩间距 */}
+                                        {isExpanded && (
+                                            <div className="px-3 pb-3 space-y-2 animate-in slide-in-from-top-2 duration-300 border-t border-gray-200/50">
+                                                {/* 平台详细描述 */}
+                                                <div className="pt-2">
+                                                    <p className="text-sm text-gray-600 leading-relaxed">
+                                                        {platform.description}
+                                                    </p>
+                                                </div>
 
-                                {/* 右侧箭头指示器 */}
-                                <div className="flex-shrink-0">
-                                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                        </svg>
+                                                {/* 详细优势和注意事项 - 卡片式分组 */}
+                                                {aiRecommendation && (
+                                                    <div className="space-y-3">
+                                                        {/* 全部优势卡片 */}
+                                                        <div className="bg-green-50/50 border border-green-100 rounded-lg p-3">
+                                                            <div className="flex items-center space-x-2 mb-2">
+                                                                <Star className="w-4 h-4 text-green-600" />
+                                                                <h5 className="text-sm font-semibold text-green-800">全部优势</h5>
+                                                            </div>
+                                                            <div className="flex flex-wrap gap-1.5">
+                                                                {aiRecommendation.pros.map((pro: string, idx: number) => (
+                                                                    <div key={idx} className="text-xs text-gray-700 bg-white/80 px-2.5 py-1 rounded-md border border-green-200/50">
+                                                                        <span>{pro}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* 注意事项卡片 */}
+                                                        <div className="bg-orange-50/50 border border-orange-100 rounded-lg p-3">
+                                                            <div className="flex items-center space-x-2 mb-2">
+                                                                <Shield className="w-4 h-4 text-orange-600" />
+                                                                <h5 className="text-sm font-semibold text-orange-800">注意事项</h5>
+                                                            </div>
+                                                            <div className="flex flex-wrap gap-1.5">
+                                                                {aiRecommendation.cons.map((con: string, idx: number) => (
+                                                                    <div key={idx} className="text-xs text-gray-700 bg-white/80 px-2.5 py-1 rounded-md border border-orange-200/50">
+                                                                        <span>{con}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* 功能标签卡片 */}
+                                                {platform.tags && platform.tags.length > 0 && (
+                                                    <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-3">
+                                                        <div className="flex items-center space-x-2 mb-2">
+                                                            <Globe className="w-4 h-4 text-blue-600" />
+                                                            <h5 className="text-sm font-semibold text-blue-800">功能特色</h5>
+                                                        </div>
+                                                        <div className="flex flex-wrap gap-1.5">
+                                                            {platform.tags.map((tag: string, idx: number) => (
+                                                                <span
+                                                                    key={idx}
+                                                                    className="bg-white/80 text-gray-700 text-xs px-2.5 py-1 rounded-md border border-blue-200/50"
+                                                                >
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
-                            </div>
+                                );
+                            })}
                         </div>
-                    ))}
+                    ) : (
+                        <div className="text-center py-8 text-gray-500">
+                            <Smartphone className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                            <p>暂无推荐平台信息</p>
+                        </div>
+                    )}
                 </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     // 提示内容
     const renderTips = () => (
@@ -543,7 +663,7 @@ const RecycleDetail: React.FC = () => {
             title="您的物品"
             image={image}
             description={description || '待处置物品'}
-            recommendationScore={70}
+            recommendationScore={getRecommendationScore()}
             recommendationLabel="回收推荐度"
             theme={recycleTheme}
             tabs={tabs}

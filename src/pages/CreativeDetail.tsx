@@ -4,6 +4,7 @@ import { Heart, Share2, ExternalLink, Star, Clock, Wrench, BarChart3, Settings, 
 import DetailPageLayout from '../components/DetailPageLayout';
 import type { TabConfig } from '../components/DetailPageLayout';
 import { creativeTheme } from '../config/detailPageThemes';
+import { useGlobalState } from '../hooks/useGlobalState';
 
 interface LocationState {
     image: string;
@@ -14,81 +15,41 @@ interface LocationState {
 const CreativeDetail: React.FC = () => {
     const location = useLocation();
     const { image, description } = (location.state as LocationState) || {};
+    const { analysisResult, inputData } = useGlobalState();
     const [isFavorited, setIsFavorited] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
     const [showDetailedTips, setShowDetailedTips] = useState(false);
     const [showExperience, setShowExperience] = useState(false);
     const [showSafety, setShowSafety] = useState(false);
 
-    // 模拟改造步骤数据
-    const creativeSteps = [
-        {
-            id: 1,
-            title: '清洁和准备',
-            description: '彻底清洁物品表面，去除污渍和灰尘，为后续改造做好准备。',
-            time: '30分钟',
-            difficulty: '简单',
-            materials: ['清洁剂', '抹布', '刷子']
-        },
-        {
-            id: 2,
-            title: '设计规划',
-            description: '根据物品特点设计改造方案，确定颜色搭配和装饰元素。',
-            time: '1小时',
-            difficulty: '中等',
-            materials: ['画笔', '颜料', '装饰材料']
-        },
-        {
-            id: 3,
-            title: '执行改造',
-            description: '按照设计方案进行改造，注意细节处理和质量把控。',
-            time: '2-3小时',
-            difficulty: '中等',
-            materials: ['工具', '胶水', '装饰品']
-        },
-        {
-            id: 4,
-            title: '完善细节',
-            description: '进行最后的修饰和完善，确保改造效果达到预期。',
-            time: '30分钟',
-            difficulty: '简单',
-            materials: ['细砂纸', '保护涂层']
-        }
-    ];
+    // 从API数据中获取创意解决方案数据
+    const creativeData = analysisResult?.creative_solution;
+    const renovationPlan = creativeData?.renovation_plan;
+    const videos = creativeData?.videos || [];
+    const creativeScore = analysisResult?.disposal_solution?.recommendations?.creative_renovation?.recommendation_score || 30;
 
-    // 模拟教程数据
-    const tutorials = [
-        {
-            id: 1,
-            title: '旧家具变身北欧风收纳柜',
-            platform: '小红书',
-            author: '家居达人小美',
-            cover: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop',
-            rating: 4.8,
-            views: '12.3万',
-            url: 'https://xiaohongshu.com'
-        },
-        {
-            id: 2,
-            title: '废物利用DIY创意收纳盒制作教程',
-            platform: 'B站',
-            author: '手工小课堂',
-            cover: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=200&fit=crop',
-            rating: 4.9,
-            views: '8.7万',
-            url: 'https://bilibili.com'
-        },
-        {
-            id: 3,
-            title: '环保改造：让旧物重获新生',
-            platform: '专业网站',
-            author: '绿色生活网',
-            cover: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=300&h=200&fit=crop',
-            rating: 4.7,
-            views: '5.2万',
-            url: 'https://example.com'
-        }
-    ];
+    // 使用API数据的改造步骤
+    const creativeSteps = renovationPlan?.steps?.map((step, index) => ({
+        id: index + 1,
+        title: step.title,
+        description: step.description,
+        time: `${step.estimated_time_minutes}分钟`,
+        difficulty: step.difficulty,
+        materials: [...(step.tools || []), ...(step.materials || [])]
+    })) || [];
+
+    // 使用API数据的教程视频
+    const tutorials = videos.length > 0 ? videos.map((video, index) => ({
+        id: index + 1,
+        title: video.title,
+        platform: 'B站',
+        author: video.uploader,
+        cover: video.cover_url,
+        rating: video.score,
+        views: video.play_count ? `${(video.play_count / 10000).toFixed(1)}万` : '未知',
+        url: video.url,
+        duration: video.duration
+    })) : [];
 
     // 定义标签页
     const tabs: TabConfig[] = [
@@ -144,48 +105,33 @@ const CreativeDetail: React.FC = () => {
                         <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Settings className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-purple-700">4</div>
+                        <div className="text-xl font-bold text-purple-700">{renovationPlan?.summary?.total_steps || 0}</div>
                         <div className="text-xs text-purple-600">改造步骤</div>
                     </div>
                     <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Clock className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-blue-700">3-4小时</div>
+                        <div className="text-xl font-bold text-blue-700">{renovationPlan?.summary?.total_time_hours || 0}小时</div>
                         <div className="text-xs text-blue-600">预计耗时</div>
                     </div>
                     <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Target className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-green-700">中等</div>
+                        <div className="text-xl font-bold text-green-700">{renovationPlan?.summary?.difficulty || '未知'}</div>
                         <div className="text-xs text-green-600">难度等级</div>
                     </div>
                     <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <DollarSign className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-orange-700">60-110元</div>
+                        <div className="text-xl font-bold text-orange-700">{renovationPlan?.summary?.budget_range || '未知'}</div>
                         <div className="text-xs text-orange-600">预算范围</div>
                     </div>
                 </div>
 
-                {/* 推荐度指示器 */}
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-3 border border-purple-200">
-                    <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                            <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                            <span className="font-semibold text-gray-800 text-sm">推荐度评分</span>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">85%</div>
-                            <div className="text-xs text-gray-600">综合评估</div>
-                        </div>
-                    </div>
-                    <div className="h-2 bg-purple-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-purple-400 to-pink-500 transition-all duration-1000 ease-out" style={{ width: '85%' }}></div>
-                    </div>
-                </div>
+
             </div>
         </div>
     );
@@ -209,13 +155,13 @@ const CreativeDetail: React.FC = () => {
                             </div>
                             <div className="flex-1 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4">
                                 <div className="flex items-start justify-between mb-2">
-                                    <h4 className="font-semibold text-gray-800">{step.title}</h4>
-                                    <div className="flex space-x-2">
-                                        <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(step.difficulty)}`}>
+                                    <h4 className="font-semibold text-gray-800 flex-1 pr-3 min-w-0">{step.title}</h4>
+                                    <div className="flex space-x-2 flex-shrink-0">
+                                        <span className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${getDifficultyColor(step.difficulty)}`}>
                                             {step.difficulty}
                                         </span>
-                                        <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-600 flex items-center">
-                                            <Clock className="w-3 h-3 mr-1" />
+                                        <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-600 flex items-center whitespace-nowrap">
+                                            <Clock className="w-3 h-3 mr-1 flex-shrink-0" />
                                             {step.time}
                                         </span>
                                     </div>
@@ -244,7 +190,7 @@ const CreativeDetail: React.FC = () => {
                 相关教程推荐
             </h3>
             <div className="space-y-4">
-                {tutorials.map((tutorial) => (
+                {tutorials.length > 0 ? tutorials.map((tutorial) => (
                     <div
                         key={tutorial.id}
                         className="bg-gradient-to-r from-white to-purple-50 rounded-2xl p-4 border border-purple-100"
@@ -257,7 +203,7 @@ const CreativeDetail: React.FC = () => {
                             />
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-start justify-between mb-2">
-                                    <h4 className="font-semibold text-gray-800 text-sm line-clamp-2">
+                                    <h4 className="font-semibold text-gray-800 text-sm line-clamp-2 flex-1 pr-2">
                                         {tutorial.title}
                                     </h4>
                                     <button
@@ -268,24 +214,31 @@ const CreativeDetail: React.FC = () => {
                                     </button>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-2">
-                                        <span className={`text-xs px-2 py-1 rounded-full text-white ${getPlatformColor(tutorial.platform)}`}>
+                                    <div className="flex items-center space-x-2 flex-1 min-w-0">
+                                        <span className={`text-xs px-2 py-1 rounded-full text-white flex-shrink-0 ${getPlatformColor(tutorial.platform)}`}>
                                             {tutorial.platform}
                                         </span>
-                                        <span className="text-xs text-gray-600">{tutorial.author}</span>
+                                        <span className="text-xs text-gray-600 truncate">{tutorial.author}</span>
                                     </div>
-                                    <div className="flex items-center space-x-3 text-xs text-gray-500">
+                                    <div className="flex items-center space-x-3 text-xs text-gray-500 flex-shrink-0 ml-2">
                                         <div className="flex items-center space-x-1">
-                                            <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                                            <span>{tutorial.rating}</span>
+                                            <Star className="w-3 h-3 text-yellow-400 fill-current flex-shrink-0" />
+                                            <span className="whitespace-nowrap">{tutorial.rating}</span>
                                         </div>
-                                        <span>{tutorial.views}</span>
+                                        <span className="whitespace-nowrap">{tutorial.views}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                ))}
+                )) : (
+                    <div className="text-center py-8">
+                        <div className="text-gray-400 mb-2">
+                            <BookOpen className="w-12 h-12 mx-auto mb-2" />
+                        </div>
+                        <p className="text-gray-500">暂无相关教程推荐</p>
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -509,10 +462,10 @@ const CreativeDetail: React.FC = () => {
 
     return (
         <DetailPageLayout
-            title="您的物品"
-            image={image}
-            description={description || '待改造物品'}
-            recommendationScore={85}
+            title={renovationPlan?.summary?.title || "您的物品"}
+            image={image || inputData?.image || undefined}
+            description={description || inputData?.description || '待改造物品'}
+            recommendationScore={creativeScore}
             recommendationLabel="改造推荐度"
             theme={creativeTheme}
             tabs={tabs}

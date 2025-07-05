@@ -96,44 +96,60 @@ const DetailPageLayout: React.FC<DetailPageLayoutProps> = ({
             <div className="px-4 pb-8">
                 {/* 物品信息和推荐度卡片 */}
                 {(image || description) && (
-                    <div className={`bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border ${theme.cardBorderColor} mb-6`}>
-                        <div className="flex items-center space-x-4 mb-4">
-                            {/* 物品图片或默认图标 */}
+                    <div className={`bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-gray-200 ${theme.cardBorderColor} mb-6`}>
+                        {/* 物品基础信息区域 */}
+                        <div className="flex items-start space-x-3 mb-5">
+                            {/* 物品图片或默认图标 - 增大20% */}
                             {image ? (
                                 <img
                                     src={image}
                                     alt="物品图片"
-                                    className="w-20 h-20 object-cover rounded-2xl shadow-lg"
+                                    className="w-24 h-24 object-cover rounded-2xl shadow-lg flex-shrink-0"
                                 />
                             ) : (
-                                <div className={`w-20 h-20 bg-gradient-to-r ${theme.defaultIconGradient} rounded-2xl shadow-lg flex items-center justify-center`}>
-                                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className={`w-24 h-24 bg-gradient-to-r ${theme.defaultIconGradient} rounded-2xl shadow-lg flex items-center justify-center flex-shrink-0`}>
+                                    <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </div>
                             )}
 
-                            {/* 物品信息 */}
-                            <div className="flex-1">
-                                <h3 className="font-bold text-gray-800 mb-1">{title}</h3>
-                                <p className="text-sm text-gray-600 mb-2">
+                            {/* 物品信息 - 增加右侧留白 */}
+                            <div className="flex-1 min-w-0 ml-3">
+                                {/* 标题 - 16-18px 中粗体 */}
+                                <h3 className="text-lg font-semibold text-gray-800 mb-2 leading-tight">
+                                    {title}
+                                </h3>
+                                {/* 详情 - 14px 常规体 */}
+                                <p className="text-sm text-gray-600 leading-relaxed">
                                     {description || '待处理物品'}
                                 </p>
-                                <div className="flex items-center space-x-2">
-                                    <div className={`text-2xl font-bold bg-gradient-to-r ${theme.recommendationGradient} bg-clip-text text-transparent`}>
-                                        {recommendationScore}%
-                                    </div>
-                                    <span className="text-sm text-gray-600">{recommendationLabel}</span>
-                                </div>
                             </div>
                         </div>
 
-                        {/* 推荐度进度条 */}
-                        <div className={`h-2 ${theme.progressBgColor} rounded-full overflow-hidden`}>
-                            <div
-                                className={`h-full bg-gradient-to-r ${theme.progressGradient} transition-all duration-1000 ease-out`}
-                                style={{ width: `${recommendationScore}%` }}
-                            />
+                        {/* 分割线 */}
+                        <div className="border-t border-gray-100 mb-4"></div>
+
+                        {/* 交易推荐度区域 */}
+                        <div className="space-y-3">
+                            <div className="flex items-center space-x-2">
+                                {/* 推荐度数值 - 15-16px 加粗突出 */}
+                                <div className={`text-base font-bold bg-gradient-to-r ${theme.recommendationGradient} bg-clip-text text-transparent`}>
+                                    {recommendationScore}%
+                                </div>
+                                {/* 推荐度标签 - 13-14px 常规字 */}
+                                <span className="text-sm text-gray-600 font-normal">
+                                    {recommendationLabel}
+                                </span>
+                            </div>
+
+                            {/* 推荐度进度条 */}
+                            <div className={`h-2 ${theme.progressBgColor} rounded-full overflow-hidden`}>
+                                <div
+                                    className={`h-full bg-gradient-to-r ${theme.progressGradient} transition-all duration-1000 ease-out`}
+                                    style={{ width: `${recommendationScore}%` }}
+                                />
+                            </div>
                         </div>
                     </div>
                 )}

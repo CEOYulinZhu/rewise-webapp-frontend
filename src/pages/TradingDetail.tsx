@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Heart, Share2, TrendingUp, DollarSign, Users, Copy, Star, Info, BarChart3, LineChart as LineChartIcon, Zap, FileText, Target, ChevronDown, ChevronUp, AlertCircle, CheckCircle2, Check } from 'lucide-react';
+import { Heart, Share2, TrendingUp, DollarSign, Users, Copy, Star, Info, BarChart3, LineChart as LineChartIcon, Zap, FileText, Target, ChevronDown, ChevronUp, AlertCircle, CheckCircle2, Check, ExternalLink, MapPin, ShoppingCart } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import DetailPageLayout from '../components/DetailPageLayout';
 import type { TabConfig } from '../components/DetailPageLayout';
 import { tradingTheme } from '../config/detailPageThemes';
+import { useGlobalState } from '../hooks/useGlobalState';
 
 interface LocationState {
     image: string;
@@ -15,7 +16,7 @@ interface LocationState {
 // 标签页定义
 const tabs: TabConfig[] = [
     { id: 'overview', name: '概览', icon: BarChart3 },
-    { id: 'market', name: '分析', icon: LineChartIcon },
+    { id: 'market', name: '市场', icon: LineChartIcon },
     { id: 'platforms', name: '对比', icon: Zap },
     { id: 'tools', name: '文案', icon: FileText },
 ];
@@ -26,106 +27,136 @@ const TradingDetail: React.FC = () => {
     const [isFavorited, setIsFavorited] = useState(false);
 
     const [activeTab, setActiveTab] = useState('overview');
-    const [showPriceChart, setShowPriceChart] = useState(true); // 默认展开第一个卡片
-    const [showSalesChart, setShowSalesChart] = useState(false);
-    const [showCompetitionChart, setShowCompetitionChart] = useState(false);
+    const [showPriceChart, setShowPriceChart] = useState(true);
+    const [showProductList, setShowProductList] = useState(false);
+    const [showPlatformStats, setShowPlatformStats] = useState(false);
     const [copiedItems, setCopiedItems] = useState<{ [key: number]: boolean }>({});
 
-    // 模拟价格分析数据
-    const priceData = [
-        { name: '50-100元', 闲鱼: 15, 转转: 12, 拍拍: 8 },
-        { name: '100-200元', 闲鱼: 25, 转转: 20, 拍拍: 15 },
-        { name: '200-300元', 闲鱼: 30, 转转: 25, 拍拍: 20 },
-        { name: '300-400元', 闲鱼: 20, 转转: 18, 拍拍: 25 },
-        { name: '400+元', 闲鱼: 10, 转转: 15, 拍拍: 32 }
-    ];
+    // 获取全局状态中的分析结果
+    const { analysisResult } = useGlobalState();
 
-    // 模拟销量趋势数据
-    const salesData = [
-        { month: '1月', sales: 120 },
-        { month: '2月', sales: 98 },
-        { month: '3月', sales: 145 },
-        { month: '4月', sales: 178 },
-        { month: '5月', sales: 156 },
-        { month: '6月', sales: 192 }
-    ];
+    // 获取二手交易方案数据
+    const secondhandSolution = analysisResult?.secondhand_solution;
+    const searchResult = secondhandSolution?.search_result?.result;
+    const contentResult = secondhandSolution?.content_result?.content_result;
+    const disposalSolution = analysisResult?.disposal_solution;
 
-    // 模拟竞争分析数据
-    const competitionData = [
-        { name: '低竞争', value: 30, color: '#10B981' },
-        { name: '中等竞争', value: 45, color: '#F59E0B' },
-        { name: '高竞争', value: 25, color: '#EF4444' }
-    ];
+    // 调试信息 - 输出数据结构
+    useEffect(() => {
+        console.log('TradingDetail Debug Info:', {
+            analysisResult: !!analysisResult,
+            secondhandSolution: !!secondhandSolution,
+            searchResult: !!searchResult,
+            platformStats: searchResult?.platform_stats,
+            contentResult: !!contentResult,
+            disposalSolution: !!disposalSolution
+        });
+    }, [analysisResult, secondhandSolution, searchResult, contentResult, disposalSolution]);
 
-    // 平台数据
-    const platforms = [
-        {
-            id: 'xianyu',
-            name: '闲鱼',
-            logoUrl: 'https://placeholder-logo-url/xianyu.png', // 闲鱼图标占位符
-            recommendation: 85,
-            userBase: '5亿+',
-            avgPrice: '180-220',
-            competition: '中等',
-            timeToSell: '3-7天',
-            color: 'from-orange-500 to-red-500',
-            bgColor: 'from-orange-50 to-red-50',
-            borderColor: 'border-orange-200',
-            url: 'https://2.taobao.com'
-        },
-        {
-            id: 'zhuanzhuan',
-            name: '转转',
-            logoUrl: 'https://placeholder-logo-url/zhuanzhuan.png', // 转转图标占位符
-            recommendation: 75,
-            userBase: '2亿+',
-            avgPrice: '200-250',
-            competition: '较低',
-            timeToSell: '5-10天',
-            color: 'from-blue-500 to-cyan-500',
-            bgColor: 'from-blue-50 to-cyan-50',
-            borderColor: 'border-blue-200',
-            url: 'https://www.zhuanzhuan.com'
-        },
-        {
-            id: 'paipai',
-            name: '拍拍',
-            logoUrl: 'https://placeholder-logo-url/paipai.png', // 拍拍图标占位符
-            recommendation: 65,
-            userBase: '1亿+',
-            avgPrice: '250-300',
-            competition: '较高',
-            timeToSell: '7-14天',
-            color: 'from-red-500 to-pink-500',
-            bgColor: 'from-red-50 to-pink-50',
-            borderColor: 'border-red-200',
-            url: 'https://www.paipai.com'
+    // 获取推荐度分数
+    const getRecommendationScore = () => {
+        if (disposalSolution?.recommendations?.secondhand_trading?.recommendation_score) {
+            return disposalSolution.recommendations.secondhand_trading.recommendation_score;
         }
-    ];
+        return 80; // 默认值
+    };
 
-    // 文案模板
-    const copyTemplates = [
-        {
-            id: 1,
-            title: '标题模板',
-            content: '【9成新】高品质闲置物品转让，原价XXX，现价XXX包邮',
-            category: 'title',
-            icon: Target
-        },
-        {
-            id: 2,
-            title: '描述模板',
-            content: '物品状况良好，使用次数不多，因搬家/升级等原因转让。支持当面交易，验货满意再付款。诚心要的私聊，非诚勿扰。',
-            category: 'description',
-            icon: FileText
+
+
+    // 处理价格数据用于图表展示
+    const getPriceChartData = () => {
+        if (!searchResult?.platform_stats) return [];
+
+        const stats = searchResult.platform_stats;
+        const chartData = [];
+
+        if (stats.xianyu?.price_stats) {
+            chartData.push({
+                name: '闲鱼',
+                最低价: stats.xianyu.price_stats.min_price || 0,
+                最高价: stats.xianyu.price_stats.max_price || 0,
+                平均价: Math.round(stats.xianyu.price_stats.average_price || 0),
+                商品数量: stats.xianyu.price_stats.product_count || 0
+            });
         }
-    ];
+
+        if (stats.aihuishou?.price_stats) {
+            chartData.push({
+                name: '爱回收',
+                最低价: stats.aihuishou.price_stats.min_price || 0,
+                最高价: stats.aihuishou.price_stats.max_price || 0,
+                平均价: Math.round(stats.aihuishou.price_stats.average_price || 0),
+                商品数量: stats.aihuishou.price_stats.product_count || 0
+            });
+        }
+
+        return chartData;
+    };
+
+    // 获取平台统计数据
+    const getPlatformStats = () => {
+        if (!searchResult?.platform_stats) return [];
+
+        const stats = searchResult.platform_stats;
+        const platformData = [];
+
+        if (stats.xianyu?.price_stats) {
+            platformData.push({
+                name: '闲鱼',
+                value: stats.xianyu.product_count || 0,
+                color: '#FF6B35',
+                avgPrice: Math.round(stats.xianyu.price_stats.average_price || 0),
+                priceRange: stats.xianyu.price_stats.price_range || '暂无数据'
+            });
+        }
+
+        if (stats.aihuishou?.price_stats) {
+            platformData.push({
+                name: '爱回收',
+                value: stats.aihuishou.product_count || 0,
+                color: '#4F9CF9',
+                avgPrice: Math.round(stats.aihuishou.price_stats.average_price || 0),
+                priceRange: stats.aihuishou.price_stats.price_range || '暂无数据'
+            });
+        }
+
+        return platformData;
+    };
+
+    // 获取建议定价
+    const getSuggestedPrice = () => {
+        if (!searchResult?.platform_stats) return '暂无数据';
+
+        const stats = searchResult.platform_stats;
+        let totalAvg = 0;
+        let count = 0;
+
+        if (stats.xianyu?.price_stats?.average_price) {
+            totalAvg += stats.xianyu.price_stats.average_price;
+            count++;
+        }
+
+        if (stats.aihuishou?.price_stats?.average_price) {
+            totalAvg += stats.aihuishou.price_stats.average_price;
+            count++;
+        }
+
+        if (count > 0) {
+            return `${Math.round(totalAvg / count)}元`;
+        }
+
+        return '暂无数据';
+    };
+
+    // 获取总商品数量
+    const getTotalProducts = () => {
+        return searchResult?.total_products || 0;
+    };
 
     const handleCopyText = (text: string, itemId: number) => {
         navigator.clipboard.writeText(text);
         setCopiedItems(prev => ({ ...prev, [itemId]: true }));
 
-        // 2秒后重置状态
         setTimeout(() => {
             setCopiedItems(prev => ({ ...prev, [itemId]: false }));
         }, 2000);
@@ -144,14 +175,14 @@ const TradingDetail: React.FC = () => {
         }
     };
 
-    // 概览内容 - 参考RecycleDetail的设计
+    // 概览内容 - 使用真实数据
     const renderOverview = () => (
         <div className="space-y-6">
             {/* 项目概要 */}
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-5 shadow-xl border border-blue-100">
                 <div className="text-center mb-5">
                     <h3 className="text-lg font-bold text-gray-800 mb-1">交易概要</h3>
-                    <p className="text-xs text-gray-500">全面了解这个交易方案</p>
+                    <p className="text-xs text-gray-500">基于真实市场数据的分析</p>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
@@ -159,58 +190,41 @@ const TradingDetail: React.FC = () => {
                         <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <DollarSign className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-green-700">200元</div>
+                        <div className="text-xl font-bold text-green-700">{getSuggestedPrice()}</div>
                         <div className="text-xs text-green-600">建议定价</div>
                     </div>
                     <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mx-auto mb-2 flex items-center justify-center">
-                            <TrendingUp className="w-5 h-5 text-white" />
+                            <ShoppingCart className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-blue-700">5-8天</div>
-                        <div className="text-xs text-blue-600">成交时间</div>
+                        <div className="text-xl font-bold text-blue-700">{getTotalProducts()}</div>
+                        <div className="text-xs text-blue-600">在售商品</div>
                     </div>
                     <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Users className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-purple-700">中等</div>
-                        <div className="text-xs text-purple-600">竞争程度</div>
+                        <div className="text-xl font-bold text-purple-700">{getPlatformStats().length}</div>
+                        <div className="text-xs text-purple-600">推荐交易平台</div>
                     </div>
                     <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl">
                         <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                             <Target className="w-5 h-5 text-white" />
                         </div>
-                        <div className="text-xl font-bold text-orange-700">78%</div>
-                        <div className="text-xs text-orange-600">成交概率</div>
+                        <div className="text-xl font-bold text-orange-700">高</div>
+                        <div className="text-xs text-orange-600">市场活跃度</div>
                     </div>
                 </div>
 
-                {/* 推荐度指示器 */}
-                <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-3 border border-blue-200">
-                    <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                            <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                            <span className="font-semibold text-gray-800 text-sm">交易推荐度</span>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">60%</div>
-                            <div className="text-xs text-gray-600">综合评估</div>
-                        </div>
-                    </div>
-                    <div className="h-2 bg-blue-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-blue-400 to-cyan-500 transition-all duration-1000 ease-out" style={{ width: '60%' }}></div>
-                    </div>
-                </div>
+
             </div>
-
-
         </div>
     );
 
-    // 市场分析内容 - 优化为可折叠展开
+    // 市场分析内容 - 使用真实数据
     const renderMarket = () => (
         <div className="space-y-4">
-            {/* 价格分析图表 - 可折叠 */}
+            {/* 价格分析图表 */}
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-blue-100">
                 <button
                     onClick={() => setShowPriceChart(!showPriceChart)}
@@ -218,10 +232,10 @@ const TradingDetail: React.FC = () => {
                 >
                     <div className="flex items-center">
                         <DollarSign className="w-5 h-5 text-blue-500 mr-2" />
-                        <h3 className="text-lg font-bold text-gray-800">价格分布分析</h3>
+                        <h3 className="text-lg font-bold text-gray-800">平台价格对比</h3>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">重要</span>
+                        <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">实时数据</span>
                         {showPriceChart ? (
                             <ChevronUp className="w-5 h-5 text-gray-500" />
                         ) : (
@@ -232,42 +246,53 @@ const TradingDetail: React.FC = () => {
 
                 {showPriceChart && (
                     <div className="px-6 pb-6 animate-in slide-in-from-top-2 duration-300">
-                        <div className="h-64 mb-3">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={priceData}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Bar dataKey="闲鱼" fill="#FF6B35" />
-                                    <Bar dataKey="转转" fill="#4F9CF9" />
-                                    <Bar dataKey="拍拍" fill="#E74C3C" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                        <div className="bg-blue-50 p-3 rounded-xl">
-                            <div className="flex items-center space-x-2">
-                                <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                                <p className="text-sm text-blue-700">大部分同类商品在200-300元价格区间成交量最高</p>
+                        {getPriceChartData().length > 0 ? (
+                            <>
+                                <div className="h-64 mb-3">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={getPriceChartData()}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="name" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Bar dataKey="最低价" fill="#10B981" />
+                                            <Bar dataKey="平均价" fill="#3B82F6" />
+                                            <Bar dataKey="最高价" fill="#EF4444" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <div className="bg-blue-50 p-3 rounded-xl">
+                                    <div className="flex items-center space-x-2">
+                                        <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                        <p className="text-sm text-blue-700">
+                                            基于{getTotalProducts()}个真实在售商品的价格分析
+                                        </p>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="text-center py-8 text-gray-500">
+                                <BarChart3 className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                <p>暂无价格数据</p>
                             </div>
-                        </div>
+                        )}
                     </div>
                 )}
             </div>
 
-            {/* 销量趋势 - 可折叠 */}
+            {/* 平台商品分布 */}
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-blue-100">
                 <button
-                    onClick={() => setShowSalesChart(!showSalesChart)}
+                    onClick={() => setShowPlatformStats(!showPlatformStats)}
                     className="w-full p-6 flex items-center justify-between rounded-t-3xl"
                 >
                     <div className="flex items-center">
                         <TrendingUp className="w-5 h-5 text-blue-500 mr-2" />
-                        <h3 className="text-lg font-bold text-gray-800">销量趋势分析</h3>
+                        <h3 className="text-lg font-bold text-gray-800">平台商品分布</h3>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">推荐</span>
-                        {showSalesChart ? (
+                        <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">分析</span>
+                        {showPlatformStats ? (
                             <ChevronUp className="w-5 h-5 text-gray-500" />
                         ) : (
                             <ChevronDown className="w-5 h-5 text-gray-500" />
@@ -275,42 +300,80 @@ const TradingDetail: React.FC = () => {
                     </div>
                 </button>
 
-                {showSalesChart && (
+                {showPlatformStats && (
                     <div className="px-6 pb-6 animate-in slide-in-from-top-2 duration-300">
-                        <div className="h-64 mb-3">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart data={salesData}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="month" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Line type="monotone" dataKey="sales" stroke="#4F9CF9" strokeWidth={3} />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                        <div className="bg-green-50 p-3 rounded-xl">
-                            <div className="flex items-center space-x-2">
-                                <TrendingUp className="w-4 h-4 text-green-600 flex-shrink-0" />
-                                <p className="text-sm text-green-700">6月是销售旺季，建议在此时段发布商品</p>
+                        {getPlatformStats().length > 0 ? (
+                            <>
+                                <div className="flex items-center space-x-6 mb-4">
+                                    <div className="h-48 w-48">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <Pie
+                                                    data={getPlatformStats()}
+                                                    cx="50%"
+                                                    cy="50%"
+                                                    innerRadius={40}
+                                                    outerRadius={80}
+                                                    dataKey="value"
+                                                >
+                                                    {getPlatformStats().map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                                    ))}
+                                                </Pie>
+                                                <Tooltip />
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    <div className="flex-1 space-y-3">
+                                        {getPlatformStats().map((item) => (
+                                            <div key={item.name} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                                <div className="flex items-center space-x-3">
+                                                    <div
+                                                        className="w-4 h-4 rounded-full"
+                                                        style={{ backgroundColor: item.color }}
+                                                    />
+                                                    <span className="text-sm font-medium text-gray-700">{item.name}</span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="text-sm font-bold text-gray-800">{item.value}个</div>
+                                                    <div className="text-xs text-gray-600">均价{item.avgPrice}元</div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="bg-green-50 p-3 rounded-xl">
+                                    <div className="flex items-center space-x-2">
+                                        <TrendingUp className="w-4 h-4 text-green-600 flex-shrink-0" />
+                                        <p className="text-sm text-green-700">
+                                            建议选择商品数量多的平台，竞争激烈但流量更大
+                                        </p>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="text-center py-8 text-gray-500">
+                                <TrendingUp className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                <p>暂无平台分布数据</p>
                             </div>
-                        </div>
+                        )}
                     </div>
                 )}
             </div>
 
-            {/* 竞争分析 - 可折叠 */}
+            {/* 真实商品展示 */}
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-blue-100">
                 <button
-                    onClick={() => setShowCompetitionChart(!showCompetitionChart)}
+                    onClick={() => setShowProductList(!showProductList)}
                     className="w-full p-6 flex items-center justify-between rounded-t-3xl"
                 >
                     <div className="flex items-center">
-                        <Users className="w-5 h-5 text-blue-500 mr-2" />
-                        <h3 className="text-lg font-bold text-gray-800">竞争程度分析</h3>
+                        <ShoppingCart className="w-5 h-5 text-blue-500 mr-2" />
+                        <h3 className="text-lg font-bold text-gray-800">同类商品参考</h3>
                     </div>
                     <div className="flex items-center space-x-2">
                         <span className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">参考</span>
-                        {showCompetitionChart ? (
+                        {showProductList ? (
                             <ChevronUp className="w-5 h-5 text-gray-500" />
                         ) : (
                             <ChevronDown className="w-5 h-5 text-gray-500" />
@@ -318,157 +381,114 @@ const TradingDetail: React.FC = () => {
                     </div>
                 </button>
 
-                {showCompetitionChart && (
+                {showProductList && (
                     <div className="px-6 pb-6 animate-in slide-in-from-top-2 duration-300">
-                        <div className="flex items-center space-x-6 mb-4">
-                            <div className="h-48 w-48">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <PieChart>
-                                        <Pie
-                                            data={competitionData}
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius={40}
-                                            outerRadius={80}
-                                            dataKey="value"
-                                        >
-                                            {competitionData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={entry.color} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip />
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </div>
-                            <div className="flex-1 space-y-3">
-                                {competitionData.map((item) => (
-                                    <div key={item.name} className="flex items-center space-x-3">
-                                        <div
-                                            className="w-4 h-4 rounded-full"
-                                            style={{ backgroundColor: item.color }}
+                        {searchResult?.products && searchResult.products.length > 0 ? (
+                            <div className="space-y-3 max-h-96 overflow-y-auto">
+                                {searchResult.products.slice(0, 6).map((product: any, index: number) => (
+                                    <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                                        <img
+                                            src={product.image_url}
+                                            alt={product.title}
+                                            className="w-12 h-12 object-cover rounded-lg"
+                                            onError={(e) => {
+                                                const target = e.currentTarget as HTMLImageElement;
+                                                target.src = 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100&h=100&fit=crop';
+                                            }}
                                         />
-                                        <span className="text-sm font-medium text-gray-700">{item.name}</span>
-                                        <span className="text-sm text-gray-600">{item.value}%</span>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">
+                                                    {product.platform}
+                                                </span>
+                                                <span className="text-lg font-bold text-green-600">
+                                                    ¥{product.price}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm text-gray-800 truncate" title={product.title}>
+                                                {product.title}
+                                            </p>
+                                            <div className="flex items-center space-x-2 mt-1">
+                                                <span className="text-xs text-gray-500">
+                                                    <MapPin className="w-3 h-3 inline mr-1" />
+                                                    {product.location}
+                                                </span>
+                                                <span className="text-xs text-gray-500">
+                                                    {product.seller}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
-                        </div>
-                        <div className="bg-blue-50 p-3 rounded-xl">
-                            <div className="flex items-center space-x-2">
-                                <AlertCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                                <p className="text-sm text-blue-700">您的商品处于中等竞争环境，建议突出产品亮点和性价比优势</p>
+                        ) : (
+                            <div className="text-center py-8 text-gray-500">
+                                <ShoppingCart className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                <p>暂无商品数据</p>
                             </div>
-                        </div>
+                        )}
                     </div>
                 )}
             </div>
         </div>
     );
 
-    // 平台跳转处理
-    const handlePlatformClick = (url: string) => {
-        window.open(url, '_blank');
-    };
-
-    // 平台对比内容 - 优化卡片设计
+    // 平台对比内容 - 使用真实数据
     const renderPlatforms = () => (
         <div className="space-y-4">
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-blue-100">
                 <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center">
                     <Zap className="w-5 h-5 text-blue-500 mr-2" />
-                    推荐平台对比
+                    平台数据对比
                 </h3>
                 <div className="space-y-4">
-                    {platforms.map((platform) => (
+                    {getPlatformStats().map((platform) => (
                         <div
-                            key={platform.id}
-                            className={`group bg-white rounded-2xl p-5 border-2 ${platform.borderColor} cursor-pointer relative overflow-hidden`}
-                            onClick={() => handlePlatformClick(platform.url)}
+                            key={platform.name}
+                            className="group bg-white rounded-2xl p-5 border-2 border-gray-200 hover:border-blue-300 transition-all duration-200"
                         >
-                            {/* 背景装饰 */}
-                            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${platform.bgColor} rounded-full transform translate-x-16 -translate-y-16 opacity-30`}></div>
-
-                            <div className="relative z-10">
-                                <div className="flex items-start justify-between mb-4">
-                                    {/* 左侧：图标和基本信息 */}
-                                    <div className="flex items-center space-x-4">
-                                        {/* 平台图标容器 */}
-                                        <div className={`w-16 h-16 bg-gradient-to-br ${platform.color} rounded-2xl shadow-lg flex items-center justify-center`}>
-                                            <img
-                                                src={platform.logoUrl}
-                                                alt={`${platform.name} logo`}
-                                                className="w-10 h-10 object-contain"
-                                                onError={(e) => {
-                                                    // 图标加载失败时显示平台名称首字母
-                                                    const target = e.currentTarget as HTMLImageElement;
-                                                    target.style.display = 'none';
-                                                    const fallback = target.nextElementSibling as HTMLElement;
-                                                    if (fallback) {
-                                                        fallback.style.display = 'flex';
-                                                    }
-                                                }}
-                                            />
-                                            <div className="w-10 h-10 hidden items-center justify-center text-white font-bold text-xl">
-                                                {platform.name[0]}
-                                            </div>
-                                        </div>
-
-                                        {/* 平台名称和推荐度 */}
-                                        <div>
-                                            <h4 className="text-xl font-bold text-gray-800 mb-1">{platform.name}</h4>
-                                            <div className="flex items-center space-x-2">
-                                                <div className="flex items-center space-x-1 bg-yellow-50 px-3 py-1 rounded-full border border-yellow-200">
-                                                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                                                    <span className="text-sm font-semibold text-yellow-700">{platform.recommendation}%</span>
-                                                </div>
-                                                <span className="text-sm text-gray-500">{platform.userBase}用户</span>
-                                            </div>
-                                        </div>
+                            <div className="flex items-start justify-between mb-4">
+                                <div className="flex items-center space-x-4">
+                                    <div
+                                        className="w-16 h-16 rounded-2xl shadow-lg flex items-center justify-center text-white font-bold text-xl"
+                                        style={{ backgroundColor: platform.color }}
+                                    >
+                                        {platform.name[0]}
                                     </div>
-
-                                    {/* 右侧：跳转指示器 */}
-                                    <div className="flex-shrink-0">
-                                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                                            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                            </svg>
+                                    <div>
+                                        <h4 className="text-xl font-bold text-gray-800 mb-1">{platform.name}</h4>
+                                        <div className="flex items-center space-x-2">
+                                            <span className="text-sm text-gray-600">{platform.value}个在售商品</span>
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* 核心信息展示区域 */}
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="text-center p-3 bg-gray-50 rounded-xl">
-                                        <div className="flex items-center justify-center mb-2">
-                                            <DollarSign className="w-5 h-5 text-green-600" />
-                                        </div>
-                                        <div className="text-base font-bold text-gray-800 leading-tight whitespace-nowrap">{platform.avgPrice}</div>
-                                        <div className="text-xs text-gray-500">平均价格</div>
+                                <div className="text-right">
+                                    <div className="text-2xl font-bold text-green-600">
+                                        ¥{platform.avgPrice}
                                     </div>
-                                    <div className="text-center p-3 bg-gray-50 rounded-xl">
-                                        <div className="flex items-center justify-center mb-2">
-                                            <TrendingUp className="w-5 h-5 text-blue-600" />
-                                        </div>
-                                        <div className="text-base font-bold text-gray-800 leading-tight whitespace-nowrap">{platform.timeToSell}</div>
-                                        <div className="text-xs text-gray-500">成交时间</div>
-                                    </div>
-                                    <div className="text-center p-3 bg-gray-50 rounded-xl">
-                                        <div className="flex items-center justify-center mb-2">
-                                            <Users className="w-5 h-5 text-purple-600" />
-                                        </div>
-                                        <div className="text-base font-bold text-gray-800 leading-tight whitespace-nowrap">{platform.competition}</div>
-                                        <div className="text-xs text-gray-500">竞争程度</div>
-                                    </div>
+                                    <div className="text-xs text-gray-500">平均价格</div>
                                 </div>
+                            </div>
 
-                                {/* 操作提示 */}
-                                <div className="mt-4 pt-3 border-t border-gray-100">
-                                    <div className="flex items-center justify-center text-sm text-gray-500">
-                                        <span>点击访问平台</span>
-                                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                        </svg>
+                            <div className="bg-gray-50 rounded-xl p-4">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <div className="text-sm font-medium text-gray-700">价格区间</div>
+                                        <div className="text-lg font-bold text-gray-800">{platform.priceRange}</div>
                                     </div>
+                                    <button
+                                        onClick={() => {
+                                            const urls: { [key: string]: string } = {
+                                                '闲鱼': 'https://2.taobao.com',
+                                                '爱回收': 'https://www.aihuishou.com'
+                                            };
+                                            window.open(urls[platform.name] || '#', '_blank');
+                                        }}
+                                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-2"
+                                    >
+                                        <span>访问平台</span>
+                                        <ExternalLink className="w-4 h-4" />
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -478,35 +498,34 @@ const TradingDetail: React.FC = () => {
         </div>
     );
 
-    // 文案工具内容 - 简化并优化
+    // 文案工具内容 - 使用真实数据
     const renderTools = () => (
         <div className="space-y-6">
-            {/* 文案模板 */}
+            {/* 生成的文案模板 */}
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-blue-100">
                 <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center">
                     <FileText className="w-5 h-5 text-blue-500 mr-2" />
-                    文案模板
+                    AI生成文案
                 </h3>
                 <div className="space-y-4">
-                    {copyTemplates.map((template) => {
-                        const IconComponent = template.icon;
-                        return (
-                            <div key={template.id} className="bg-gradient-to-r from-white to-blue-50 rounded-2xl p-4 border border-blue-100">
+                    {contentResult && (
+                        <>
+                            <div className="bg-gradient-to-r from-white to-blue-50 rounded-2xl p-4 border border-blue-100">
                                 <div className="flex items-start space-x-4">
                                     <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                                        <IconComponent className="w-5 h-5 text-white" />
+                                        <Target className="w-5 h-5 text-white" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between mb-2">
-                                            <h4 className="font-semibold text-gray-800">{template.title}</h4>
+                                            <h4 className="font-semibold text-gray-800">商品标题</h4>
                                             <button
-                                                onClick={() => handleCopyText(template.content, template.id)}
-                                                className={`flex items-center space-x-1 text-sm px-3 py-1 rounded-lg ${copiedItems[template.id]
+                                                onClick={() => handleCopyText(contentResult.title, 1)}
+                                                className={`flex items-center space-x-1 text-sm px-3 py-1 rounded-lg ${copiedItems[1]
                                                     ? 'text-green-600 bg-green-50 border border-green-200'
                                                     : 'text-blue-600 bg-blue-50'
                                                     }`}
                                             >
-                                                {copiedItems[template.id] ? (
+                                                {copiedItems[1] ? (
                                                     <>
                                                         <Check className="w-3 h-3" />
                                                         <span>已复制</span>
@@ -519,14 +538,49 @@ const TradingDetail: React.FC = () => {
                                                 )}
                                             </button>
                                         </div>
-                                        <p className="text-sm text-gray-600 whitespace-pre-line leading-relaxed">
-                                            {template.content}
+                                        <p className="text-sm text-gray-600 leading-relaxed">
+                                            {contentResult.title}
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                        );
-                    })}
+
+                            <div className="bg-gradient-to-r from-white to-green-50 rounded-2xl p-4 border border-green-100">
+                                <div className="flex items-start space-x-4">
+                                    <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <FileText className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h4 className="font-semibold text-gray-800">商品描述</h4>
+                                            <button
+                                                onClick={() => handleCopyText(contentResult.description, 2)}
+                                                className={`flex items-center space-x-1 text-sm px-3 py-1 rounded-lg ${copiedItems[2]
+                                                    ? 'text-green-600 bg-green-50 border border-green-200'
+                                                    : 'text-green-600 bg-green-50'
+                                                    }`}
+                                            >
+                                                {copiedItems[2] ? (
+                                                    <>
+                                                        <Check className="w-3 h-3" />
+                                                        <span>已复制</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Copy className="w-3 h-3" />
+                                                        <span>复制</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+                                        <p className="text-sm text-gray-600 leading-relaxed">
+                                            {contentResult.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -540,7 +594,7 @@ const TradingDetail: React.FC = () => {
                     <div className="space-y-3">
                         <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
                             <AlertCircle className="w-4 h-4 text-green-600" />
-                            <span className="text-sm text-green-700">选择最佳发布时间</span>
+                            <span className="text-sm text-green-700">参考同类商品定价</span>
                         </div>
                         <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
                             <CheckCircle2 className="w-4 h-4 text-green-600" />
@@ -550,11 +604,11 @@ const TradingDetail: React.FC = () => {
                     <div className="space-y-3">
                         <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
                             <Star className="w-4 h-4 text-green-600" />
-                            <span className="text-sm text-green-700">详细描述商品状况</span>
+                            <span className="text-sm text-green-700">突出商品亮点</span>
                         </div>
                         <div className="flex items-center space-x-2 bg-white/60 rounded-lg px-3 py-2">
                             <DollarSign className="w-4 h-4 text-green-600" />
-                            <span className="text-sm text-green-700">合理定价策略</span>
+                            <span className="text-sm text-green-700">价格略低于均价</span>
                         </div>
                     </div>
                 </div>
@@ -583,7 +637,7 @@ const TradingDetail: React.FC = () => {
             title="您的物品"
             image={image}
             description={description || '待出售物品'}
-            recommendationScore={60}
+            recommendationScore={getRecommendationScore()}
             recommendationLabel="交易推荐度"
             theme={tradingTheme}
             tabs={tabs}

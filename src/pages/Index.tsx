@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const Index: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [description, setDescription] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDragOver, setIsDragOver] = useState(false);
     const [showTips, setShowTips] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -51,7 +51,7 @@ const Index: React.FC = () => {
             return;
         }
 
-        setIsLoading(true);
+        setIsSubmitting(true);
 
         let analysisMode = 'text';
         if (selectedImage && description.trim()) {
@@ -60,8 +60,9 @@ const Index: React.FC = () => {
             analysisMode = 'image';
         }
 
+        // 添加微妙的点击反馈延迟，然后直接跳转
         setTimeout(() => {
-            setIsLoading(false);
+            setIsSubmitting(false);
             navigate('/overview', {
                 state: {
                     image: selectedImage,
@@ -69,7 +70,7 @@ const Index: React.FC = () => {
                     analysisMode
                 }
             });
-        }, 2000);
+        }, 300);
     };
 
     const handleRetake = () => {
@@ -126,54 +127,7 @@ const Index: React.FC = () => {
 
     const analysisInfo = getAnalysisType();
 
-    // 设计有趣的加载动画组件
-    const LoadingAnimation = () => (
-        <div className="flex items-center space-x-3">
-            {/* 旋转的AI大脑图标 */}
-            <div className="relative">
-                <div className="w-6 h-6 rounded-full border-2 border-white/40 border-t-white animate-spin"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                </div>
-            </div>
 
-            {/* 数据流动效果 */}
-            <div className="flex space-x-1">
-                <div className="flex flex-col space-y-1">
-                    <div className="w-1 h-1 bg-white/90 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-                    <div className="w-1 h-1 bg-white/70 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-                <div className="flex flex-col space-y-1">
-                    <div className="w-1 h-1 bg-white/70 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-1 h-1 bg-white/90 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
-                </div>
-                <div className="flex flex-col space-y-1">
-                    <div className="w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-1 h-1 bg-white/70 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
-                    <div className="w-1 h-1 bg-white/90 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                </div>
-            </div>
-
-            {/* 文字处理效果 - 增强对比度 */}
-            <div className="flex space-x-0.5">
-                {['AI', '正', '在', '深', '度', '分', '析', '中'].map((char, index) => (
-                    <span
-                        key={index}
-                        className="text-white font-medium drop-shadow-sm animate-pulse"
-                        style={{
-                            animationDelay: `${index * 0.1}s`,
-                            animationDuration: '1s',
-                            textShadow: '0 1px 2px rgba(0,0,0,0.3)'
-                        }}
-                    >
-                        {char}
-                    </span>
-                ))}
-            </div>
-        </div>
-    );
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-emerald-50/30 relative overflow-hidden">
@@ -373,19 +327,22 @@ const Index: React.FC = () => {
                 <div className="pt-2 relative">
                     <button
                         onClick={handleSubmit}
-                        disabled={!canSubmit() || isLoading}
-                        className={`w-full py-4 rounded-3xl font-bold text-lg flex items-center justify-center space-x-3 relative overflow-hidden ${canSubmit() && !isLoading
-                            ? `bg-gradient-to-r ${analysisInfo.gradient} text-white shadow-2xl ${analysisInfo.shadowColor} border border-white/20`
+                        disabled={!canSubmit() || isSubmitting}
+                        className={`w-full py-4 rounded-3xl font-bold text-lg flex items-center justify-center space-x-3 relative overflow-hidden transition-all duration-300 ${canSubmit() && !isSubmitting
+                            ? `bg-gradient-to-r ${analysisInfo.gradient} text-white shadow-2xl ${analysisInfo.shadowColor} border border-white/20 hover:scale-[1.02] active:scale-[0.98]`
                             : 'bg-gray-200 text-gray-500 cursor-not-allowed shadow-lg'
                             }`}
                     >
                         {/* 按钮背景动画 */}
-                        {canSubmit() && !isLoading && (
+                        {canSubmit() && !isSubmitting && (
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%]"></div>
                         )}
 
-                        {isLoading ? (
-                            <LoadingAnimation />
+                        {isSubmitting ? (
+                            <div className="flex items-center space-x-2">
+                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                <span>处理中...</span>
+                            </div>
                         ) : (
                             <>
                                 <analysisInfo.icon className="w-5 h-5" />
